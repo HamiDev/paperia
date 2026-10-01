@@ -21,8 +21,8 @@
 
   @include respond-up($hero-breakpoint) {
     display: block;
-    // Keep the full composition in the first viewport (header ~5rem).
-    height: min(#{calc(100vw * 682 / 1024)}, calc(100vh - 5.5rem), 40rem);
+    // Keep the full composition in the first viewport (sticky header ~4.5rem).
+    height: min(#{calc(100vw * 682 / 1024)}, calc(100vh - 4.5rem), 40rem);
     min-height: 22rem;
     padding: 0;
   }

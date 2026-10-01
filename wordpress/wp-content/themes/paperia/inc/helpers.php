@@ -74,6 +74,28 @@ function paperia_get_shop_url() {
 }
 
 /**
+ * Account / login URL for the site header.
+ *
+ * Prefers the WooCommerce My Account page; otherwise WordPress login or profile.
+ *
+ * @return string
+ */
+function paperia_get_account_url() {
+	if ( function_exists( 'wc_get_page_permalink' ) ) {
+		$url = wc_get_page_permalink( 'myaccount' );
+		if ( is_string( $url ) && '' !== $url ) {
+			return $url;
+		}
+	}
+
+	if ( is_user_logged_in() ) {
+		return get_edit_profile_url();
+	}
+
+	return wp_login_url();
+}
+
+/**
  * Brand mark HTML for the homepage hero (above the title).
  *
  * Prefers the Customizer logo when set; otherwise the theme brand PNG.
