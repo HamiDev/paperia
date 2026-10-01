@@ -862,7 +862,7 @@ button {
   display: flex;
   flex-direction: column;
   isolation: isolate;
-  min-height: 38rem;
+  min-height: 30rem;
   padding-block: 3rem 2rem;
 }
 @media (min-width: 48rem) {
@@ -905,6 +905,7 @@ button {
   padding-inline: 1rem;
   margin-block-start: 1rem;
   pointer-events: none;
+  top: 4rem;
 }
 @media (min-width: 48rem) {
   .hero-scene__stage {
@@ -966,7 +967,7 @@ button {
     position: absolute;
     z-index: 3;
     left: 3%;
-    bottom: 10%;
+    bottom: 3%;
     width: 23%;
   }
 }
