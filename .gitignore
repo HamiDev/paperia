@@ -11,54 +11,24 @@ Thumbs.db
 *.swp
 *.swo
 
-# Docker WordPress mount (core is pulled by the image/volume)
-/wordpress/
+# Docker WordPress mount — ignore core, keep the Paperia theme trackable
+/wordpress/*
+!/wordpress/wp-content/
+/wordpress/wp-content/*
+!/wordpress/wp-content/themes/
+/wordpress/wp-content/themes/*
+!/wordpress/wp-content/themes/paperia/
 
-# Wordpress - ignore core, configuration, examples, uploads and logs.
-# https://github.com/github/gitignore/blob/main/WordPress.gitignore
-
-# Core
-#
-# Note: if you want to stage/commit WP core files
-# you can delete this whole section/until Configuration.
-/wp-admin/
-/wp-content/index.php
-/wp-content/languages
-/wp-content/plugins/index.php
-/wp-content/themes/index.php
-/wp-includes/
-/index.php
-/license.txt
-/readme.html
-/wp-*.php
-/xmlrpc.php
-
-# Configuration
+# Configuration & runtime
 wp-config.php
-
-# Example themes
-/wp-content/themes/twenty*/
-
-# Example plugin
-/wp-content/plugins/hello.php
-
-# Uploads
-/wp-content/uploads/
-
-# Log files
+**/wp-config.php
 *.log
-
-# htaccess
 /.htaccess
+/wordpress/.htaccess
 
-# All plugins
-#
-# Note: If you wish to whitelist plugins,
-# uncomment the next line
-#/wp-content/plugins
+# Uploads (media stays local / on server)
+/wordpress/wp-content/uploads/
 
-# All themes
-#
-# Note: If you wish to whitelist themes,
-# uncomment the next line
-#/wp-content/themes
+# Compiled Sass maps / caches (keep compiled CSS if you choose to commit it)
+**/*.css.map
+.sass-cache/
