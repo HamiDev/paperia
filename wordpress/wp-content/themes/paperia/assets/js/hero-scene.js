@@ -26,7 +26,9 @@
   var content = root.querySelector('[data-hero-content]');
   var notebooks = root.querySelector('[data-hero-notebooks]');
   var products = root.querySelector('[data-hero-products]');
-  var planes = root.querySelector('[data-hero-planes]');
+  var planeYellow = root.querySelector('[data-hero-plane="yellow"]');
+  var planeBlue = root.querySelector('[data-hero-plane="blue"]');
+  var planePink = root.querySelector('[data-hero-plane="pink"]');
   var leavesLeft = root.querySelector('[data-hero-leaves-left]');
   var leavesRight = root.querySelector('[data-hero-leaves-right]');
 
@@ -35,6 +37,7 @@
   var cta = content ? content.querySelector('.hero-scene__cta') : null;
   var brand = content ? content.querySelector('[data-hero-brand]') : null;
   var copyBits = [brand, title, subtitle, cta].filter(Boolean);
+  var planes = [planeYellow, planeBlue, planePink].filter(Boolean);
 
   var entrance = gsap.timeline({
     defaults: { ease: 'power2.out' },
@@ -75,53 +78,110 @@
     );
   }
 
-  if (planes) {
-    entrance.from(
-      planes,
-      {
-        opacity: 0,
-        duration: 0.7,
-      },
-      '-=0.55'
-    );
-
+  if (planes.length) {
     var frame = root.querySelector('.hero-scene__frame') || root;
     var isDesktop = window.matchMedia('(min-width: 48rem)').matches;
+    var travelX = Math.max(frame.offsetWidth * 1.2, isDesktop ? 360 : 280);
 
-    if (isDesktop) {
-      var travelX = Math.max(frame.offsetWidth * 0.72, 320);
+    /**
+     * Fly one plane across the banner on its own path.
+     * Progress drives x + y together so cruise and bob never fight.
+     */
+    function flyPlane(el, config) {
+      if (!el) {
+        return;
+      }
 
-      // Keep x and y on one timeline so both always run together.
-      gsap.set(planes, { x: 0, y: 0 });
+      var duration = config.duration;
+      var fade = Math.min(1.2, duration * 0.08);
+      var proxy = { t: 0 };
 
-      gsap
-        .timeline({
-          delay: 0.8,
-          repeat: -1,
-        })
-        .to(planes, {
-          x: travelX,
-          duration: 28,
-          ease: 'none',
-        }, 0)
-        .to(planes, {
-          y: -28,
-          duration: 2.8,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: 9, // 10 half-cycles ≈ 28s to match the cruise
-        }, 0);
-    } else {
-      gsap.to(planes, {
-        y: '+=8',
-        x: '+=12',
-        duration: 4.5,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: 1.2,
+      gsap.set(el, {
+        x: config.startX,
+        y: config.startY,
+        rotation: config.rotation || 0,
+        opacity: 0,
       });
+
+      var flight = gsap.timeline({
+        delay: config.delay,
+        repeat: -1,
+      });
+
+      flight.to(
+        el,
+        {
+          opacity: 1,
+          duration: fade,
+          ease: 'power1.out',
+        },
+        0
+      );
+
+      flight.to(
+        proxy,
+        {
+          t: 1,
+          duration: duration,
+          ease: 'none',
+          onUpdate: function () {
+            var t = proxy.t;
+            var x = config.startX + (config.endX - config.startX) * t;
+            var baseY = config.startY + (config.endY - config.startY) * t;
+            var bob = Math.sin(t * Math.PI * config.bobCycles * 2) * config.bob;
+            gsap.set(el, { x: x, y: baseY + bob });
+          },
+        },
+        0
+      );
+
+      flight.to(
+        el,
+        {
+          opacity: 0,
+          duration: fade,
+          ease: 'power1.in',
+        },
+        duration - fade
+      );
     }
+
+    // Same cross-banner flights on mobile and desktop; lanes/timing scale slightly.
+    flyPlane(planeYellow, {
+      startX: 0,
+      startY: isDesktop ? 0 : 8,
+      endX: travelX,
+      endY: isDesktop ? -18 : -24,
+      duration: isDesktop ? 26 : 18,
+      delay: 0.35,
+      bob: isDesktop ? 14 : 18,
+      bobCycles: 5,
+      rotation: -4,
+    });
+
+    flyPlane(planeBlue, {
+      startX: isDesktop ? -40 : -24,
+      startY: isDesktop ? 36 : 48,
+      endX: travelX * 1.05,
+      endY: isDesktop ? -48 : -20,
+      duration: isDesktop ? 32 : 22,
+      delay: isDesktop ? 4.5 : 2.2,
+      bob: isDesktop ? 22 : 26,
+      bobCycles: 4,
+      rotation: 2,
+    });
+
+    flyPlane(planePink, {
+      startX: isDesktop ? -80 : -36,
+      startY: isDesktop ? -10 : 20,
+      endX: travelX * 1.1,
+      endY: isDesktop ? 42 : 56,
+      duration: isDesktop ? 20 : 14,
+      delay: isDesktop ? 8 : 4.5,
+      bob: isDesktop ? 18 : 22,
+      bobCycles: 6,
+      rotation: -8,
+    });
   }
 
   if (leavesLeft || leavesRight) {

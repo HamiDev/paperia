@@ -986,25 +986,60 @@ button {
   }
 }
 
-.hero-scene__layer--planes {
+.hero-scene__planes {
   position: absolute;
+  inset: 0;
   z-index: 4;
-  top: 3%;
-  left: 0;
-  right: 0;
-  width: min(32%, 8.5rem);
-  margin-inline: auto;
-  opacity: 0.9;
+  overflow: hidden;
   pointer-events: none;
 }
+
+.hero-scene__plane {
+  position: absolute;
+  display: block;
+  height: auto;
+  max-width: none;
+  user-select: none;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 6px 10px rgba(40, 80, 60, 0.18));
+}
+.hero-scene__plane--yellow {
+  top: 18%;
+  left: -18%;
+  width: clamp(2.75rem, 14vw, 4.25rem);
+  opacity: 0.92;
+}
 @media (min-width: 48rem) {
-  .hero-scene__layer--planes {
-    top: 3%;
-    left: 2%;
-    right: auto;
-    width: 13%;
-    margin-inline: 0;
-    opacity: 0.95;
+  .hero-scene__plane--yellow {
+    top: 7%;
+    left: -8%;
+    width: 6.5%;
+  }
+}
+.hero-scene__plane--blue {
+  top: 36%;
+  left: -22%;
+  width: clamp(2.5rem, 12vw, 3.75rem);
+  opacity: 0.9;
+}
+@media (min-width: 48rem) {
+  .hero-scene__plane--blue {
+    top: 20%;
+    left: -10%;
+    width: 5.5%;
+  }
+}
+.hero-scene__plane--pink {
+  top: 28%;
+  left: -20%;
+  width: clamp(2.25rem, 11vw, 3.5rem);
+  opacity: 0.88;
+}
+@media (min-width: 48rem) {
+  .hero-scene__plane--pink {
+    top: 12%;
+    left: -12%;
+    width: 5%;
   }
 }
 
@@ -1085,10 +1120,12 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .hero-scene__bg-image,
-  .hero-scene__layer {
+  .hero-scene__layer,
+  .hero-scene__plane {
     will-change: auto;
   }
   .hero-scene.is-reduced-motion .hero-scene__layer,
+  .hero-scene.is-reduced-motion .hero-scene__plane,
   .hero-scene.is-reduced-motion .hero-scene__content,
   .hero-scene.is-reduced-motion .hero-scene__bg-image {
     opacity: 1 !important;

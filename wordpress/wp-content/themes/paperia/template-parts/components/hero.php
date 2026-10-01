@@ -70,14 +70,35 @@ $paperia_hero_base     = PAPERIA_URI . '/assets/images/hero';
 				class="hero-scene__layer hero-scene__layer--products"
 				data-hero-products
 			>
+		</div>
+
+		<div class="hero-scene__planes" data-hero-planes aria-hidden="true">
 			<img
-				src="<?php echo esc_url( $paperia_hero_base . '/planes.png' ); ?>"
+				src="<?php echo esc_url( $paperia_hero_base . '/plane-yellow.png' ); ?>"
 				alt=""
-				width="537"
-				height="403"
+				width="228"
+				height="189"
 				decoding="async"
-				class="hero-scene__layer hero-scene__layer--planes"
-				data-hero-planes
+				class="hero-scene__plane hero-scene__plane--yellow"
+				data-hero-plane="yellow"
+			>
+			<img
+				src="<?php echo esc_url( $paperia_hero_base . '/plane-blue.png' ); ?>"
+				alt=""
+				width="239"
+				height="177"
+				decoding="async"
+				class="hero-scene__plane hero-scene__plane--blue"
+				data-hero-plane="blue"
+			>
+			<img
+				src="<?php echo esc_url( $paperia_hero_base . '/plane-pink.png' ); ?>"
+				alt=""
+				width="232"
+				height="172"
+				decoding="async"
+				class="hero-scene__plane hero-scene__plane--pink"
+				data-hero-plane="pink"
 			>
 		</div>
 
