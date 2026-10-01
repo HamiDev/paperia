@@ -130,3 +130,88 @@ function paperia_get_hero_brand_html() {
 		esc_attr( $site_name )
 	);
 }
+
+/**
+ * Icomoon icon class for a WooCommerce account menu endpoint.
+ *
+ * @param string $endpoint Account menu endpoint slug.
+ * @return string Icon class name (without leading dot), or empty string.
+ */
+function paperia_get_account_nav_icon( $endpoint ) {
+	$endpoint = is_string( $endpoint ) ? $endpoint : '';
+
+	$icons = array(
+		'dashboard'       => 'icon-SquaresFour',
+		'orders'          => 'icon-Package',
+		'downloads'       => 'icon-DownloadSimple',
+		'edit-address'    => 'icon-MapPin',
+		'payment-methods' => 'icon-CreditCard',
+		'edit-account'    => 'icon-UserCircle',
+		'customer-logout' => 'icon-SignOut',
+	);
+
+	/**
+	 * Filter account navigation icon classes.
+	 *
+	 * @param array  $icons    Endpoint => icon class map.
+	 * @param string $endpoint Current endpoint.
+	 */
+	$icons = apply_filters( 'paperia_account_nav_icons', $icons, $endpoint );
+
+	if ( isset( $icons[ $endpoint ] ) && is_string( $icons[ $endpoint ] ) ) {
+		return $icons[ $endpoint ];
+	}
+
+	return 'icon-Circle';
+}
+
+/**
+ * Initials for a user avatar placeholder.
+ *
+ * @param WP_User|null $user User object. Defaults to current user.
+ * @return string One or two uppercase characters.
+ */
+function paperia_get_user_initials( $user = null ) {
+	if ( ! $user instanceof WP_User ) {
+		$user = wp_get_current_user();
+	}
+
+	if ( ! $user instanceof WP_User || 0 === (int) $user->ID ) {
+		return '';
+	}
+
+	$first = trim( (string) $user->first_name );
+	$last  = trim( (string) $user->last_name );
+
+	if ( '' !== $first && '' !== $last ) {
+		$initials = mb_substr( $first, 0, 1 ) . mb_substr( $last, 0, 1 );
+	} elseif ( '' !== $first ) {
+		$initials = mb_substr( $first, 0, 2 );
+	} else {
+		$display  = trim( (string) $user->display_name );
+		$initials = '' !== $display ? mb_substr( $display, 0, 2 ) : mb_substr( (string) $user->user_login, 0, 2 );
+	}
+
+	return mb_strtoupper( $initials );
+}
+
+/**
+ * Add body classes on WooCommerce account pages for themed layout.
+ *
+ * @param string[] $classes Existing body classes.
+ * @return string[]
+ */
+function paperia_account_body_class( $classes ) {
+	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+		$classes[] = 'paperia-account-page';
+
+		if ( is_user_logged_in() ) {
+			$classes[] = 'paperia-account-page--logged-in';
+		} else {
+			$classes[] = 'paperia-account-page--logged-out';
+		}
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'paperia_account_body_class' );

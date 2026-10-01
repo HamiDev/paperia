@@ -1,0 +1,729 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+
+// WooCommerce My Account — Paperia shell, dashboard, endpoints, auth.
+
+.paperia-account-page {
+  background:
+    radial-gradient(ellipse 80% 50% at 100% 0%, var(--color-pastel-mint) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 0% 20%, var(--color-hero-bg) 0%, transparent 50%),
+    var(--color-bg-soft);
+}
+
+// Account UI is not prose — lift the reading-column max-width from content-page.
+.paperia-account-page .content-page__body {
+  max-width: none;
+  width: 100%;
+}
+
+.paperia-account-page .container {
+  padding-block: $space-6 $space-8;
+}
+
+.paperia-account-page .content-page__header {
+  margin-bottom: $space-5;
+}
+
+.paperia-account-page .content-page__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.paperia-account-page--logged-out .content-page__header {
+  text-align: center;
+}
+
+// ---------------------------------------------------------------------------
+// Shell
+// ---------------------------------------------------------------------------
+
+.woocommerce-account .paperia-account {
+  display: grid;
+  gap: $space-5;
+  align-items: start;
+  width: 100%;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: minmax(14rem, 16.5rem) minmax(0, 1fr);
+    gap: $space-6;
+  }
+
+  // Override WooCommerce layout.css floats/widths (loads after theme styles).
+  .woocommerce-MyAccount-navigation,
+  .woocommerce-MyAccount-content {
+    float: none !important;
+    width: 100% !important;
+    max-width: none;
+  }
+}
+
+.paperia-account__content {
+  min-width: 0;
+  width: 100%;
+  padding: $space-5;
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 8px 28px rgb(40 150 108 / 6%);
+
+  @include respond-up($bp-md) {
+    padding: $space-6;
+  }
+
+  a {
+    color: var(--color-accent);
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--color-accent-hover);
+  }
+}
+
+.paperia-account__nav {
+  min-width: 0;
+  width: 100%;
+}
+
+.paperia-account__nav-list {
+  display: flex;
+  gap: $space-2;
+  margin: 0;
+  padding: $space-2;
+  list-style: none;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 8px 28px rgb(40 150 108 / 6%);
+
+  @include respond-up($bp-md) {
+    flex-direction: column;
+    overflow: visible;
+    padding: $space-3;
+  }
+}
+
+.paperia-account__nav-list li {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.paperia-account__nav-link {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: 0.65rem 0.9rem;
+  border-radius: $radius-md;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+
+  @include respond-up($bp-md) {
+    width: 100%;
+  }
+}
+
+// Beat base `a:not(.button)` accent color (higher specificity).
+a.paperia-account__nav-link:not(.button) {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+a.paperia-account__nav-link:not(.button):hover,
+a.paperia-account__nav-link:not(.button):focus-visible {
+  background: var(--color-pastel-mint);
+  color: var(--color-accent);
+}
+
+.paperia-account__nav-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.paperia-account__nav-label {
+  color: inherit;
+}
+
+.is-active a.paperia-account__nav-link:not(.button),
+a.paperia-account__nav-link[aria-current='page']:not(.button) {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  box-shadow: 0 4px 14px rgb(40 150 108 / 25%);
+}
+
+.is-active a.paperia-account__nav-link:not(.button) .paperia-account__nav-icon,
+.is-active a.paperia-account__nav-link:not(.button) .paperia-account__nav-label,
+a.paperia-account__nav-link[aria-current='page']:not(.button) .paperia-account__nav-icon,
+a.paperia-account__nav-link[aria-current='page']:not(.button) .paperia-account__nav-label {
+  color: var(--color-accent-contrast);
+}
+
+.woocommerce-MyAccount-navigation-link--customer-logout a.paperia-account__nav-link:not(.button) {
+  color: var(--color-muted);
+}
+
+.woocommerce-MyAccount-navigation-link--customer-logout a.paperia-account__nav-link:not(.button):hover,
+.woocommerce-MyAccount-navigation-link--customer-logout a.paperia-account__nav-link:not(.button):focus-visible {
+  background: var(--color-pastel-pink);
+  color: #b42318;
+}
+
+.woocommerce-MyAccount-navigation-link--customer-logout .paperia-account__nav-icon {
+  color: inherit;
+}
+
+// ---------------------------------------------------------------------------
+// Dashboard
+// ---------------------------------------------------------------------------
+
+.paperia-account-welcome {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-5;
+  padding: $space-4 $space-5;
+  border-radius: $radius-lg;
+  background:
+    linear-gradient(135deg, var(--color-pastel-mint) 0%, var(--color-hero-bg) 100%);
+}
+
+.paperia-account-welcome__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.paperia-account-welcome__greeting {
+  margin: 0 0 0.2rem;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.paperia-account-welcome__meta {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.paperia-account-welcome__meta a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.paperia-account-dashboard__intro {
+  margin: 0 0 $space-5;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.paperia-account-shortcuts {
+  display: grid;
+  gap: $space-3;
+  grid-template-columns: 1fr;
+
+  @include respond-up($bp-sm) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.paperia-account-shortcut {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-3;
+  min-width: 0;
+  padding: $space-4;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.paperia-account-shortcut:hover,
+.paperia-account-shortcut:focus-visible {
+  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
+  box-shadow: 0 10px 24px rgb(40 150 108 / 10%);
+  transform: translateY(-2px);
+  color: inherit;
+}
+
+.paperia-account-shortcut__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: $radius-md;
+  background: var(--color-pastel-mint);
+  color: var(--color-accent);
+  font-size: 1.25rem;
+}
+
+.paperia-account-shortcut__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.paperia-account-shortcut__title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--color-text);
+}
+
+.paperia-account-shortcut__desc {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.paperia-account-shortcut__arrow {
+  flex-shrink: 0;
+  margin-block-start: 0.35rem;
+  color: var(--color-accent);
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.paperia-account-shortcut:hover .paperia-account-shortcut__arrow,
+.paperia-account-shortcut:focus-visible .paperia-account-shortcut__arrow {
+  opacity: 1;
+  transform: translateX(-3px);
+}
+
+// ---------------------------------------------------------------------------
+// Orders / tables
+// ---------------------------------------------------------------------------
+
+.paperia-account-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-inline: -$space-1;
+  padding-inline: $space-1;
+}
+
+.woocommerce-orders-table,
+.woocommerce-table--order-downloads,
+.shop_table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.woocommerce-orders-table thead th,
+.shop_table thead th {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.woocommerce-orders-table tbody th,
+.woocommerce-orders-table tbody td,
+.shop_table tbody th,
+.shop_table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.woocommerce-orders-table tbody tr:last-child th,
+.woocommerce-orders-table tbody tr:last-child td,
+.shop_table tbody tr:last-child th,
+.shop_table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.woocommerce-orders-table tbody tr:hover {
+  background: color-mix(in srgb, var(--color-pastel-mint) 45%, transparent);
+}
+
+.paperia-order-status,
+mark.order-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: $radius-pill;
+  background: var(--color-pastel-blue);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.paperia-order-status--completed,
+.paperia-order-status--processing {
+  background: var(--color-pastel-mint);
+  color: var(--color-accent-hover);
+}
+
+.paperia-order-status--on-hold,
+.paperia-order-status--pending {
+  background: var(--color-pastel-yellow);
+  color: #8a6d00;
+}
+
+.paperia-order-status--cancelled,
+.paperia-order-status--failed,
+.paperia-order-status--refunded {
+  background: var(--color-pastel-pink);
+  color: #b42318;
+}
+
+.paperia-order-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+.paperia-account-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  margin-top: $space-5;
+}
+
+@media (max-width: #{$bp-sm}) {
+  .woocommerce-orders-table thead {
+    display: none;
+  }
+
+  .woocommerce-orders-table,
+  .woocommerce-orders-table tbody,
+  .woocommerce-orders-table tr,
+  .woocommerce-orders-table th,
+  .woocommerce-orders-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .woocommerce-orders-table tbody tr {
+    margin-bottom: $space-3;
+    padding: $space-3;
+    border: 1px solid var(--color-border);
+    border-radius: $radius-md;
+  }
+
+  .woocommerce-orders-table tbody th,
+  .woocommerce-orders-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    gap: $space-3;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  .woocommerce-orders-table tbody th:last-child,
+  .woocommerce-orders-table tbody td:last-child {
+    border-bottom: 0;
+  }
+
+  .woocommerce-orders-table tbody th::before,
+  .woocommerce-orders-table tbody td::before {
+    content: attr(data-title);
+    color: var(--color-muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Addresses
+// ---------------------------------------------------------------------------
+
+.paperia-account-addresses__intro {
+  margin: 0 0 $space-5;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.paperia-account-addresses__grid {
+  display: grid;
+  gap: $space-4;
+}
+
+.paperia-account-addresses__grid--two {
+  @include respond-up($bp-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.paperia-account-address {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  padding: $space-5;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  background: color-mix(in srgb, var(--color-bg-soft) 70%, var(--color-surface));
+}
+
+.paperia-account-address__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-2;
+}
+
+.paperia-account-address__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.paperia-account-address__edit {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.paperia-account-address__body {
+  margin: 0;
+  color: var(--color-muted);
+  font-style: normal;
+  line-height: 1.8;
+}
+
+// ---------------------------------------------------------------------------
+// Forms inside account
+// ---------------------------------------------------------------------------
+
+.paperia-account-form__title {
+  margin: 0 0 $space-5;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.paperia-account-form__row--split {
+  display: grid;
+  gap: 0;
+
+  @include respond-up($bp-sm) {
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+  }
+}
+
+.paperia-account-form__row--split .form-row {
+  margin-bottom: $space-4;
+}
+
+.paperia-account-form__fieldset {
+  margin: $space-5 0;
+  padding: $space-5;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-bg-soft);
+}
+
+.paperia-account-form__fieldset legend {
+  padding-inline: $space-2;
+  color: var(--color-heading);
+  font-weight: 700;
+}
+
+.paperia-account-form__hint {
+  display: block;
+  margin-top: $space-2;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.paperia-account-form__actions {
+  margin-top: $space-4;
+  margin-bottom: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Auth (login / register / lost password)
+// ---------------------------------------------------------------------------
+
+.paperia-account-page--logged-out .woocommerce {
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+.paperia-account-auth {
+  width: 100%;
+}
+
+.paperia-account-auth--narrow {
+  max-width: 26rem;
+  margin-inline: auto;
+}
+
+.paperia-account-auth__grid {
+  display: grid;
+  gap: $space-4;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: 1fr 1fr;
+    gap: $space-5;
+  }
+}
+
+.paperia-account-auth__grid--single {
+  max-width: 26rem;
+  margin-inline: auto;
+  grid-template-columns: 1fr;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.paperia-account-auth__panel {
+  padding: $space-5 $space-6;
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 8px 28px rgb(40 150 108 / 6%);
+}
+
+.paperia-account-auth__title {
+  margin: 0 0 $space-5;
+  color: var(--color-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.paperia-account-auth__note {
+  margin: 0 0 $space-4;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.paperia-account-auth__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+}
+
+// ---------------------------------------------------------------------------
+// View order
+// ---------------------------------------------------------------------------
+
+.paperia-account-view-order__status {
+  margin: 0 0 $space-5;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: var(--color-bg-soft);
+  line-height: 1.7;
+}
+
+.paperia-account-view-order__status mark {
+  background: transparent;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.paperia-account-view-order__status mark.order-status {
+  display: inline-flex;
+  margin-inline-start: 0.15rem;
+}
+
+.paperia-account-view-order__updates {
+  margin-bottom: $space-5;
+}
+
+.paperia-account-view-order__updates h2 {
+  margin: 0 0 $space-3;
+  font-size: 1.1rem;
+}
+
+.woocommerce-OrderUpdates {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.woocommerce-OrderUpdate {
+  margin-bottom: $space-3;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: var(--color-bg-soft);
+}
+
+.woocommerce-OrderUpdate-meta {
+  margin: 0 0 $space-2;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+// ---------------------------------------------------------------------------
+// Notices
+// ---------------------------------------------------------------------------
+
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error,
+.woocommerce-notices-wrapper .woocommerce-message,
+.woocommerce-notices-wrapper .woocommerce-info,
+.woocommerce-notices-wrapper .woocommerce-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-3;
+  margin: 0 0 $space-5;
+  padding: $space-4 $space-5;
+  border-radius: $radius-md;
+  border-inline-start: 3px solid var(--color-accent);
+  background: var(--color-pastel-mint);
+  color: var(--color-text);
+  list-style: none;
+}
+
+.woocommerce-error {
+  border-inline-start-color: #b42318;
+  background: var(--color-pastel-pink);
+}
+
+.woocommerce-info {
+  border-inline-start-color: #1565c0;
+  background: var(--color-pastel-blue);
+}
+
+.paperia-account-empty .woocommerce-info,
+.paperia-account-empty .woocommerce-message {
+  margin-bottom: 0;
+}

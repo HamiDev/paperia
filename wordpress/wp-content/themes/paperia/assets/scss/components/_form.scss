@@ -1,6 +1,145 @@
+@use '../abstracts/variables' as *;
+
 input,
 textarea,
 select,
 button {
   font: inherit;
+}
+
+// Shared WooCommerce / theme form controls (account, checkout, etc.)
+
+.woocommerce form .form-row,
+.woocommerce-form-row,
+.woocommerce-address-fields__field-wrapper .form-row {
+  margin: 0 0 $space-4;
+}
+
+.woocommerce form .form-row label,
+.woocommerce-form-row label,
+.woocommerce-address-fields__field-wrapper .form-row label {
+  display: inline-block;
+  margin-bottom: $space-2;
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.woocommerce .required,
+.required {
+  color: #b42318;
+  text-decoration: none;
+}
+
+.woocommerce form .input-text,
+.woocommerce-Input,
+.woocommerce form input.input-text,
+.woocommerce form textarea,
+.woocommerce form select,
+.woocommerce-address-fields input.input-text,
+.woocommerce-address-fields select,
+.woocommerce-address-fields textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.woocommerce form .input-text:hover,
+.woocommerce-Input:hover,
+.woocommerce form select:hover,
+.woocommerce-address-fields input.input-text:hover,
+.woocommerce-address-fields select:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
+}
+
+.woocommerce form .input-text:focus,
+.woocommerce-Input:focus,
+.woocommerce form textarea:focus,
+.woocommerce form select:focus,
+.woocommerce-address-fields input.input-text:focus,
+.woocommerce-address-fields select:focus,
+.woocommerce-address-fields textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.woocommerce-form__label-for-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  margin-bottom: 0;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.woocommerce-form__input-checkbox {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-accent);
+}
+
+.woocommerce form .button,
+.woocommerce-Button,
+.woocommerce-button.button,
+.woocommerce button.button,
+.woocommerce a.button,
+.woocommerce input.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
+  border: 0;
+  border-radius: $radius-pill;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.woocommerce form .button:hover,
+.woocommerce form .button:focus-visible,
+.woocommerce-Button:hover,
+.woocommerce-Button:focus-visible,
+.woocommerce-button.button:hover,
+.woocommerce-button.button:focus-visible,
+.woocommerce a.button:hover,
+.woocommerce a.button:focus-visible {
+  background: var(--color-accent-hover);
+  color: var(--color-accent-contrast);
+  transform: translateY(-1px);
+}
+
+.woocommerce form .button.alt,
+.woocommerce-button--alt {
+  background: var(--color-accent);
+}
+
+.woocommerce .form-row-first,
+.woocommerce .form-row-last {
+  width: 100%;
+}
+
+@media (min-width: 36rem) {
+  .woocommerce-address-fields__field-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 $space-4;
+  }
+
+  .woocommerce-address-fields__field-wrapper .form-row-wide {
+    grid-column: 1 / -1;
+  }
 }
