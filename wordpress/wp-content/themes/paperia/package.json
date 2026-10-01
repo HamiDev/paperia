@@ -1,0 +1,12 @@
+{
+  "name": "paperia-theme",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "sass": "sass assets/scss/styles.scss assets/css/styles.css --style=expanded",
+    "sass:watch": "sass --watch assets/scss/styles.scss:assets/css/styles.css --style=expanded"
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  }
+}

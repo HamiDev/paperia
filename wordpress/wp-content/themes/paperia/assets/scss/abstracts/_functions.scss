@@ -1,0 +1,13 @@
+@use 'variables' as *;
+
+@function space($step) {
+  @if $step == 1 { @return $space-1; }
+  @if $step == 2 { @return $space-2; }
+  @if $step == 3 { @return $space-3; }
+  @if $step == 4 { @return $space-4; }
+  @if $step == 5 { @return $space-5; }
+  @if $step == 6 { @return $space-6; }
+  @if $step == 7 { @return $space-7; }
+  @if $step == 8 { @return $space-8; }
+  @return $space-4;
+}

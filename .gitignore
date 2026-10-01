@@ -29,6 +29,7 @@ wp-config.php
 # Uploads (media stays local / on server)
 /wordpress/wp-content/uploads/
 
-# Compiled Sass maps / caches (keep compiled CSS if you choose to commit it)
+# Compiled Sass maps / caches (compiled CSS is committed for WP)
 **/*.css.map
 .sass-cache/
+**/node_modules/

@@ -1,0 +1,18 @@
+.content-card {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.content-card__title {
+  margin-bottom: 0.35rem;
+  font-size: 1.35rem;
+}
+
+.content-card__title a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.content-card__excerpt {
+  color: var(--color-muted);
+}

@@ -1,0 +1,22 @@
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  margin-top: auto;
+}
+
+.site-footer__inner {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+  padding-block: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-footer__copy {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}

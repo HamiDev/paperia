@@ -1,0 +1,14 @@
+.hero {
+  padding-block: 3rem 2rem;
+}
+
+.hero__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  max-width: 16ch;
+}
+
+.hero__text {
+  max-width: 40ch;
+  color: var(--color-muted);
+  font-size: 1.15rem;
+}

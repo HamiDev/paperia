@@ -1,0 +1,9 @@
+.archive-header,
+.search-header {
+  margin-bottom: 1.5rem;
+}
+
+.archive-header__title,
+.search-header__title {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
