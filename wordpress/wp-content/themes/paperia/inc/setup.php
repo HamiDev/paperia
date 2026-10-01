@@ -41,6 +41,13 @@ function paperia_setup() {
 		'flex-width'  => true,
 	) );
 
+	/*
+	 * Tell WooCommerce this theme is store-aware.
+	 * Without this, WooCommerce still runs, but uses generic fallbacks
+	 * for product images and layout hooks.
+	 */
+	add_theme_support( 'woocommerce' );
+
 	register_nav_menus(
 		array(
 			'primary' => __( 'Primary Menu', 'paperia' ),
