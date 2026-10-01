@@ -1,7 +1,7 @@
 services:
   db:
     image: mysql:8.0
-    container_name: wp-db
+    container_name: paperia-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -21,7 +21,7 @@ services:
 
   wordpress:
     image: wordpress:php8.3-apache
-    container_name: wordpress
+    container_name: paperia-wordpress
     depends_on:
       db:
         condition: service_healthy
@@ -39,7 +39,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
-    container_name: phpmyadmin
+    container_name: paperia-phpmyadmin
     depends_on:
       db:
         condition: service_healthy
