@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PAPERIA_VERSION', '0.1.0' );
+define( 'PAPERIA_VERSION', '0.2.0' );
 define( 'PAPERIA_DIR', get_template_directory() );
 define( 'PAPERIA_URI', get_template_directory_uri() );
 

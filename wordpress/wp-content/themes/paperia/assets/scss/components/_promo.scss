@@ -1,0 +1,110 @@
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.home-promo {
+  padding-block: $space-5 $space-7;
+}
+
+.home-promo__inner {
+  display: grid;
+  gap: $space-5;
+  align-items: center;
+  padding: $space-5;
+  border-radius: $radius-lg;
+  background: var(--color-promo-bg);
+
+  @include respond-up($bp-md) {
+    grid-template-columns: auto 1fr auto;
+    padding: $space-6 $space-5;
+  }
+}
+
+.home-promo__visual {
+  display: none;
+  align-items: center;
+  gap: $space-3;
+
+  @include respond-up($bp-md) {
+    display: flex;
+  }
+}
+
+.home-promo__stack,
+.home-promo__swatches {
+  display: block;
+  border-radius: $radius-md;
+}
+
+.home-promo__stack {
+  width: 4.5rem;
+  height: 5.5rem;
+  background: linear-gradient(180deg, #fff 0%, var(--color-pastel-cream) 100%);
+  box-shadow: 0 6px 16px rgb(40 150 108 / 10%);
+}
+
+.home-promo__swatches {
+  width: 3.25rem;
+  height: 4.5rem;
+  background:
+    linear-gradient(
+      180deg,
+      var(--color-pastel-pink) 0 25%,
+      var(--color-pastel-blue) 25% 50%,
+      var(--color-pastel-peach) 50% 75%,
+      var(--color-pastel-purple) 75% 100%
+    );
+}
+
+.home-promo__copy {
+  text-align: center;
+
+  @include respond-up($bp-md) {
+    text-align: start;
+  }
+}
+
+.home-promo__title {
+  margin: 0 0 $space-2;
+  color: var(--color-heading);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.home-promo__text {
+  margin: 0;
+  color: var(--color-muted);
+  max-width: 36ch;
+  margin-inline: auto;
+
+  @include respond-up($bp-md) {
+    margin-inline: 0;
+  }
+}
+
+.home-promo__action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+}
+
+.home-promo__form-icon {
+  display: none;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-md;
+  background: var(--color-surface);
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  box-shadow: 0 4px 14px rgb(40 150 108 / 10%);
+
+  @include respond-up($bp-md) {
+    display: inline-flex;
+  }
+}
+
+.home-promo__button {
+  min-width: 10rem;
+}

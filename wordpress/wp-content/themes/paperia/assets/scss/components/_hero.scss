@@ -1,14 +1,204 @@
-.hero {
-  padding-block: 3rem 2rem;
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.hero-slider {
+  position: relative;
+  background: var(--color-hero-bg);
+  overflow: hidden;
 }
 
-.hero__title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  max-width: 16ch;
+.hero-slider__viewport {
+  position: relative;
 }
 
-.hero__text {
-  max-width: 40ch;
-  color: var(--color-muted);
+.hero-slide {
+  display: none;
+  position: relative;
+  isolation: isolate;
+
+  &.is-active {
+    display: block;
+  }
+}
+
+.hero-slide__media {
+  position: relative;
+  z-index: 0;
+  // Match the banner asset ratio (1024×682) so the image is never stretched.
+  aspect-ratio: 1024 / 682;
+  overflow: hidden;
+}
+
+.hero-slide__image {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center left;
+
+  @include respond-up($bp-md) {
+    object-position: center;
+  }
+}
+
+.hero-slide__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  padding: $space-5 $space-4 $space-6;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--color-hero-bg) 18%,
+    var(--color-hero-bg) 100%
+  );
+  margin-block-start: -3.5rem;
+
+  @include respond-up($bp-md) {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: min(42%, 28rem);
+    margin: 0;
+    padding: $space-7 clamp(1.25rem, 3vw, 3rem);
+    justify-content: center;
+    text-align: start;
+    align-items: flex-start;
+    background: linear-gradient(
+      to left,
+      transparent 0%,
+      rgb(238 248 241 / 72%) 35%,
+      rgb(238 248 241 / 92%) 100%
+    );
+  }
+}
+
+.hero-slide__eyebrow {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-ui);
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.hero-slide__brand-mark {
+  display: inline-block;
+  color: var(--color-heading);
+  font-family: var(--font-ui);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.hero-slide__actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  width: min(100%, 22rem);
+  margin-inline: auto;
+
+  @include respond-up($bp-md) {
+    margin-inline: 0;
+  }
+}
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  border-radius: $radius-lg;
+  text-decoration: none;
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgb(40 150 108 / 12%);
+  }
+}
+
+.hero-cta--peach {
+  background: var(--color-pastel-peach);
+}
+
+.hero-cta--mint {
+  background: var(--color-pastel-teal);
+}
+
+.hero-cta__icon,
+.hero-cta__arrow {
+  color: var(--color-accent);
   font-size: 1.15rem;
+}
+
+.hero-cta__label {
+  flex: 1;
+  text-align: start;
+}
+
+.hero-cta__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: $radius-pill;
+  background: var(--color-surface);
+  color: var(--color-accent);
+  box-shadow: 0 2px 8px rgb(40 150 108 / 12%);
+}
+
+.hero-slider__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  padding: $space-3 $space-4 $space-5;
+}
+
+.hero-slider__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: $radius-pill;
+  background: var(--color-surface);
+  color: var(--color-accent);
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgb(40 150 108 / 10%);
+}
+
+.hero-slider__dots {
+  display: flex;
+  gap: $space-2;
+}
+
+.hero-slider__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  padding: 0;
+  border: 0;
+  border-radius: $radius-pill;
+  background: var(--color-border);
+  cursor: pointer;
+
+  &.is-active {
+    background: var(--color-accent);
+    width: 1.25rem;
+  }
 }

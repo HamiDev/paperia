@@ -1,16 +1,107 @@
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
 .site-footer {
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-footer);
   margin-top: auto;
+  padding-block: $space-7 $space-5;
 }
 
 .site-footer__inner {
-  width: min(100% - 2rem, 72rem);
+  width: min(100% - 2rem, $content-width);
   margin-inline: auto;
-  padding-block: 1.5rem;
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: $space-6;
+  grid-template-columns: 1fr;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-up($bp-lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.site-footer__heading {
+  margin: 0 0 $space-4;
+  color: var(--color-heading);
+  font-size: 1.05rem;
+}
+
+.site-footer__social {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: $space-3;
+}
+
+.site-footer__social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: $radius-pill;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  text-decoration: none;
+  font-size: 1.15rem;
+}
+
+.site-footer__contact,
+.site-footer__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $space-3;
+}
+
+.site-footer__contact li {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-2;
+  color: var(--color-muted);
+}
+
+.site-footer__contact .icon-Phone,
+.site-footer__contact .icon-EnvelopeSimple,
+.site-footer__contact .icon-MapPin {
+  color: var(--color-accent);
+  margin-block-start: 0.15rem;
+}
+
+.site-footer__contact a,
+.site-footer__menu a {
+  color: var(--color-muted);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-accent);
+  }
+}
+
+.site-footer__hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.site-footer__bottom {
+  margin-block-start: $space-6;
+  padding-block-start: $space-4;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
   align-items: center;
   justify-content: space-between;
 }
@@ -18,5 +109,18 @@
 .site-footer__copy {
   margin: 0;
   color: var(--color-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+}
+
+.site-footer__copy a {
+  color: var(--color-heading);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.site-footer__logo-mark {
+  color: var(--color-heading);
+  font-family: var(--font-ui);
+  font-weight: 800;
+  letter-spacing: 0.05em;
 }

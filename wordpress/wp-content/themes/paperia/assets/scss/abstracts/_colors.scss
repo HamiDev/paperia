@@ -1,12 +1,27 @@
 // Semantic token names only. Light/dark values live in themes/*.
+// Pastel palette derived from the Namdar landing mockup.
 :root {
-  --color-bg: #f6f3ee;
-  --color-surface: #fffcf7;
-  --color-text: #1c1917;
-  --color-muted: #57534e;
-  --color-border: #d6d3d1;
-  --color-accent: #0f766e;
-  --color-accent-contrast: #f0fdfa;
+  --color-bg: #ffffff;
+  --color-bg-soft: #f7faf8;
+  --color-surface: #ffffff;
+  --color-footer: #f3f4f6;
+  --color-text: #2c3338;
+  --color-muted: #6b7280;
+  --color-heading: #28966c;
+  --color-border: #e5e7eb;
+  --color-accent: #28966c;
+  --color-accent-hover: #1f7a57;
+  --color-accent-contrast: #ffffff;
+  --color-hero-bg: #eef8f1;
+  --color-promo-bg: #e8f5e9;
+  --color-pastel-mint: #e8f5e9;
+  --color-pastel-cream: #fffdf0;
+  --color-pastel-pink: #fce4ec;
+  --color-pastel-blue: #e3f2fd;
+  --color-pastel-peach: #ffe8d6;
+  --color-pastel-purple: #f3e5f5;
+  --color-pastel-yellow: #fff8e1;
+  --color-pastel-teal: #d9f2ec;
   --font-body: 'Vazirmatn', Tahoma, Arial, sans-serif;
   --font-ui: 'Vazirmatn', Tahoma, Arial, sans-serif;
 }

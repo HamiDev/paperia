@@ -43,3 +43,29 @@
     window.localStorage.setItem(storageKey, next);
   });
 })();
+
+/**
+ * Mobile primary nav toggle.
+ */
+(function () {
+  const toggle = document.querySelector('[data-nav-toggle]');
+  const nav = document.querySelector('[data-site-nav]');
+
+  if (!toggle || !nav) {
+    return;
+  }
+
+  toggle.addEventListener('click', function () {
+    const isOpen = !nav.hasAttribute('hidden');
+
+    if (isOpen) {
+      nav.setAttribute('hidden', '');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', toggle.getAttribute('data-label-open') || 'Open menu');
+    } else {
+      nav.removeAttribute('hidden');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', toggle.getAttribute('data-label-close') || 'Close menu');
+    }
+  });
+})();

@@ -32,5 +32,15 @@ function paperia_enqueue_assets() {
 		PAPERIA_VERSION,
 		true
 	);
+
+	if ( is_front_page() ) {
+		wp_enqueue_script(
+			'paperia-hero-slider',
+			PAPERIA_URI . '/assets/js/hero-slider.js',
+			array(),
+			PAPERIA_VERSION,
+			true
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'paperia_enqueue_assets' );

@@ -1,1 +1,57 @@
-// Home-specific styles can grow here.
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.home-landing__main {
+  width: min(100% - 2rem, $content-width);
+  margin-inline: auto;
+  padding-block: $space-2 $space-6;
+}
+
+.home-featured {
+  padding-block: $space-5;
+}
+
+.home-featured__header {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-5;
+}
+
+.home-featured__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  white-space: nowrap;
+}
+
+.home-featured__rule {
+  flex: 1;
+  height: 0;
+  border-top: 2px dashed var(--color-accent);
+  opacity: 0.45;
+}
+
+.home-featured__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-4;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-up($bp-lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.home-featured__empty {
+  margin: 0;
+  padding: $space-5;
+  border-radius: $radius-lg;
+  background: var(--color-bg-soft);
+  color: var(--color-muted);
+  text-align: center;
+}
