@@ -35,9 +35,25 @@ function paperia_enqueue_assets() {
 
 	if ( is_front_page() ) {
 		wp_enqueue_script(
-			'paperia-hero-slider',
-			PAPERIA_URI . '/assets/js/hero-slider.js',
+			'gsap',
+			'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',
 			array(),
+			'3.12.5',
+			true
+		);
+
+		wp_enqueue_script(
+			'gsap-scroll-trigger',
+			'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js',
+			array( 'gsap' ),
+			'3.12.5',
+			true
+		);
+
+		wp_enqueue_script(
+			'paperia-hero-scene',
+			PAPERIA_URI . '/assets/js/hero-scene.js',
+			array( 'gsap', 'gsap-scroll-trigger' ),
 			PAPERIA_VERSION,
 			true
 		);

@@ -2,203 +2,244 @@
 @use '../abstracts/mixins' as *;
 @use '../abstracts/variables' as *;
 
-.hero-slider {
+// Softened layered homepage hero.
+// Mobile: stacked copy + products. Desktop: absolute scene matching the banner art.
+
+.hero-scene {
   position: relative;
-  background: var(--color-hero-bg);
   overflow: hidden;
+  background: var(--color-hero-bg);
 }
 
-.hero-slider__viewport {
+.hero-scene__frame {
   position: relative;
-}
-
-.hero-slide {
-  display: none;
-  position: relative;
+  display: flex;
+  flex-direction: column;
   isolation: isolate;
+  min-height: 38rem;
+  padding-block: $space-7 $space-6;
 
-  &.is-active {
+  @include respond-up($hero-breakpoint) {
     display: block;
+    // Keep the full composition in the first viewport (header ~5rem).
+    height: min(#{calc(100vw * 682 / 1024)}, calc(100vh - 5.5rem), 40rem);
+    min-height: 22rem;
+    padding: 0;
   }
 }
 
-.hero-slide__media {
-  position: relative;
-  z-index: 0;
-  // Match the banner asset ratio (1024×682) so the image is never stretched.
-  aspect-ratio: 1024 / 682;
-  overflow: hidden;
-}
-
-.hero-slide__image {
-  display: block;
+.hero-scene__bg {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-scene__bg-image {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: 115%;
   max-width: none;
   object-fit: cover;
-  object-position: center left;
-
-  @include respond-up($bp-md) {
-    object-position: center;
-  }
+  object-position: center top;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
-.hero-slide__content {
+.hero-scene__stage {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: $space-4;
-  padding: $space-5 $space-4 $space-6;
-  text-align: center;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    var(--color-hero-bg) 18%,
-    var(--color-hero-bg) 100%
-  );
-  margin-block-start: -3.5rem;
+  order: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: $space-3;
+  padding-inline: $space-4;
+  margin-block-start: $space-4;
+  pointer-events: none;
 
-  @include respond-up($bp-md) {
+  @include respond-up($hero-breakpoint) {
     position: absolute;
-    inset-block: 0;
-    inset-inline-start: 0;
-    width: min(42%, 28rem);
+    inset: 0;
+    display: block;
     margin: 0;
-    padding: $space-7 clamp(1.25rem, 3vw, 3rem);
-    justify-content: center;
-    text-align: start;
-    align-items: flex-start;
-    background: linear-gradient(
-      to left,
-      transparent 0%,
-      rgb(238 248 241 / 72%) 35%,
-      rgb(238 248 241 / 92%) 100%
-    );
+    padding: 0;
   }
 }
 
-.hero-slide__eyebrow {
-  margin: 0;
-  color: var(--color-heading);
-  font-family: var(--font-ui);
-  font-size: clamp(1.35rem, 2.5vw, 2rem);
-  font-weight: 700;
-  line-height: 1.35;
+.hero-scene__layer {
+  display: block;
+  max-width: none;
+  height: auto;
+  user-select: none;
+  will-change: transform, opacity;
 }
 
-.hero-slide__brand-mark {
-  display: inline-block;
-  color: var(--color-heading);
-  font-family: var(--font-ui);
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  line-height: 1;
+.hero-scene__layer--leaves-left,
+.hero-scene__layer--leaves-right {
+  display: none;
+
+  @include respond-up($hero-breakpoint) {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    width: 10%;
+    filter: blur(0.35px);
+    opacity: 0.88;
+  }
 }
 
-.hero-slide__actions {
+.hero-scene__layer--leaves-left {
+  @include respond-up($hero-breakpoint) {
+    left: -1%;
+    bottom: -2%;
+    width: 10%;
+  }
+}
+
+.hero-scene__layer--leaves-right {
+  @include respond-up($hero-breakpoint) {
+    right: -1%;
+    bottom: -2%;
+    width: 11%;
+  }
+}
+
+.hero-scene__layer--notebooks {
+  width: 100%;
+  justify-self: start;
+  filter: drop-shadow(0 8px 18px rgb(40 150 108 / 12%));
+
+  @include respond-up($hero-breakpoint) {
+    position: absolute;
+    z-index: 3;
+    left: 3%;
+    bottom: 10%;
+    width: 28%;
+  }
+}
+
+.hero-scene__layer--products {
+  width: 100%;
+  justify-self: end;
+  filter: drop-shadow(0 8px 18px rgb(40 150 108 / 12%));
+
+  @include respond-up($hero-breakpoint) {
+    position: absolute;
+    z-index: 3;
+    right: 2%;
+    bottom: 12%;
+    width: 34%;
+  }
+}
+
+.hero-scene__layer--planes {
+  position: absolute;
+  z-index: 4;
+  top: 3%;
+  left: 0;
+  right: 0;
+  width: min(32%, 8.5rem);
+  margin-inline: auto;
+  opacity: 0.9;
+  pointer-events: none;
+
+  @include respond-up($hero-breakpoint) {
+    // Start near the upper-left; GSAP flies them across to the right.
+    top: 3%;
+    left: 2%;
+    right: auto;
+    width: 13%;
+    margin-inline: 0;
+    opacity: 0.95;
+  }
+}
+
+.hero-scene__content {
+  position: relative;
+  z-index: 5;
+  order: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: $space-3;
-  width: min(100%, 22rem);
-  margin-inline: auto;
+  padding-inline: $space-5;
+  text-align: center;
 
-  @include respond-up($bp-md) {
-    margin-inline: 0;
+  @include respond-up($hero-breakpoint) {
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    padding-inline: clamp(1.5rem, 10vw, 8rem);
+    padding-block: $space-5;
+    // Keep copy in the open center — products hug the sides.
+    padding-block-end: 12%;
   }
 }
 
-.hero-cta {
+.hero-scene__brand {
   display: flex;
-  align-items: center;
-  gap: $space-3;
-  padding: $space-3 $space-4;
-  border-radius: $radius-lg;
-  text-decoration: none;
-  color: var(--color-text);
+  justify-content: center;
+  margin-block-end: $space-1;
+}
+
+.hero-scene__brand-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 4.5rem;
+  max-height: 4.5rem;
+  object-fit: contain;
+
+  @include respond-up($hero-breakpoint) {
+    max-width: 5.25rem;
+    max-height: 5.25rem;
+  }
+}
+
+.hero-scene__title {
+  margin: 0;
+  max-width: 18ch;
+  color: var(--color-heading);
   font-family: var(--font-ui);
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: clamp(1.5rem, 3.6vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 55%);
+}
 
-  &:hover,
-  &:focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgb(40 150 108 / 12%);
+.hero-scene__subtitle {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  font-weight: 500;
+  line-height: 1.6;
+  opacity: 0.88;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 45%);
+}
+
+.hero-scene__cta {
+  margin-block-start: $space-2;
+  padding-inline: 1.75rem;
+  padding-block: 0.8rem;
+  border-radius: $radius-pill;
+  box-shadow: 0 10px 24px rgb(40 150 108 / 22%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene__bg-image,
+  .hero-scene__layer {
+    will-change: auto;
   }
-}
 
-.hero-cta--peach {
-  background: var(--color-pastel-peach);
-}
-
-.hero-cta--mint {
-  background: var(--color-pastel-teal);
-}
-
-.hero-cta__icon,
-.hero-cta__arrow {
-  color: var(--color-accent);
-  font-size: 1.15rem;
-}
-
-.hero-cta__label {
-  flex: 1;
-  text-align: start;
-}
-
-.hero-cta__arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: $radius-pill;
-  background: var(--color-surface);
-  color: var(--color-accent);
-  box-shadow: 0 2px 8px rgb(40 150 108 / 12%);
-}
-
-.hero-slider__controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: $space-3;
-  padding: $space-3 $space-4 $space-5;
-}
-
-.hero-slider__nav {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 0;
-  border-radius: $radius-pill;
-  background: var(--color-surface);
-  color: var(--color-accent);
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgb(40 150 108 / 10%);
-}
-
-.hero-slider__dots {
-  display: flex;
-  gap: $space-2;
-}
-
-.hero-slider__dot {
-  width: 0.55rem;
-  height: 0.55rem;
-  padding: 0;
-  border: 0;
-  border-radius: $radius-pill;
-  background: var(--color-border);
-  cursor: pointer;
-
-  &.is-active {
-    background: var(--color-accent);
-    width: 1.25rem;
+  .hero-scene.is-reduced-motion .hero-scene__layer,
+  .hero-scene.is-reduced-motion .hero-scene__content,
+  .hero-scene.is-reduced-motion .hero-scene__bg-image {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

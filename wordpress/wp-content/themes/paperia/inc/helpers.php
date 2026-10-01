@@ -31,73 +31,80 @@ function paperia_get_color_scheme() {
 }
 
 /**
- * Default hero slides when ACF has no slides yet.
+ * Default Persian headline for the homepage hero scene.
  *
- * Theme images live in assets/images/hero/. Editors can replace these later
- * via an ACF repeater named `hero_slides` on the front page.
- *
- * @return array<int, array<string, string>>
+ * @return string
  */
-function paperia_get_default_hero_slides() {
-	return array(
-		array(
-			'title'          => __( 'دنیای شاد کاغذ و تحریر', 'paperia' ),
-			'desktop_image'  => PAPERIA_URI . '/assets/images/hero/banner-desktop.jpg',
-			'mobile_image'   => PAPERIA_URI . '/assets/images/hero/banner-mobile.jpg',
-			'cta_primary'    => __( 'ثبت سفارش بسته بندی', 'paperia' ),
-			'cta_primary_url'=> home_url( '/' ),
-			'cta_secondary'  => __( 'درخواست نمایندگی', 'paperia' ),
-			'cta_secondary_url' => home_url( '/' ),
-		),
-	);
+function paperia_get_default_hero_title() {
+	return __( 'کاغذ نامدار، با افتخار برای ایران', 'paperia' );
 }
 
 /**
- * Resolve hero slides for the front-page slider.
+ * Resolve the homepage hero headline.
  *
- * Prefers ACF `hero_slides` on the current page when present; otherwise
- * falls back to the theme default images so the landing page still works.
+ * Prefers ACF `hero_title` on the front page when set; otherwise the theme default.
  *
- * @return array<int, array<string, mixed>>
+ * @return string
  */
-function paperia_get_hero_slides() {
-	$slides = array();
-
+function paperia_get_hero_title() {
 	if ( function_exists( 'get_field' ) ) {
-		$acf_slides = get_field( 'hero_slides' );
+		$title = get_field( 'hero_title' );
+		if ( is_string( $title ) && '' !== trim( $title ) ) {
+			return sanitize_text_field( $title );
+		}
+	}
 
-		if ( is_array( $acf_slides ) && ! empty( $acf_slides ) ) {
-			foreach ( $acf_slides as $row ) {
-				if ( ! is_array( $row ) ) {
-					continue;
-				}
+	return paperia_get_default_hero_title();
+}
 
-				$desktop = isset( $row['desktop_image'] ) ? $row['desktop_image'] : null;
-				$mobile  = isset( $row['mobile_image'] ) ? $row['mobile_image'] : null;
+/**
+ * Shop URL for the hero CTA — WooCommerce shop page when available.
+ *
+ * @return string
+ */
+function paperia_get_shop_url() {
+	if ( function_exists( 'wc_get_page_permalink' ) ) {
+		$url = wc_get_page_permalink( 'shop' );
+		if ( is_string( $url ) && '' !== $url ) {
+			return $url;
+		}
+	}
 
-				$desktop_url = is_array( $desktop ) && ! empty( $desktop['url'] ) ? $desktop['url'] : '';
-				$mobile_url  = is_array( $mobile ) && ! empty( $mobile['url'] ) ? $mobile['url'] : $desktop_url;
+	return home_url( '/' );
+}
 
-				if ( '' === $desktop_url && '' === $mobile_url ) {
-					continue;
-				}
+/**
+ * Brand mark HTML for the homepage hero (above the title).
+ *
+ * Prefers the Customizer logo when set; otherwise the theme brand PNG.
+ *
+ * @return string Escaped HTML.
+ */
+function paperia_get_hero_brand_html() {
+	$site_name = get_bloginfo( 'name' );
 
-				$slides[] = array(
-					'title'             => isset( $row['title'] ) ? (string) $row['title'] : '',
-					'desktop_image'     => $desktop_url ? $desktop_url : $mobile_url,
-					'mobile_image'      => $mobile_url ? $mobile_url : $desktop_url,
-					'cta_primary'       => isset( $row['cta_primary'] ) ? (string) $row['cta_primary'] : '',
-					'cta_primary_url'   => isset( $row['cta_primary_url'] ) ? (string) $row['cta_primary_url'] : '',
-					'cta_secondary'     => isset( $row['cta_secondary'] ) ? (string) $row['cta_secondary'] : '',
-					'cta_secondary_url' => isset( $row['cta_secondary_url'] ) ? (string) $row['cta_secondary_url'] : '',
-				);
+	if ( has_custom_logo() ) {
+		$logo_id = (int) get_theme_mod( 'custom_logo' );
+		if ( $logo_id > 0 ) {
+			$image = wp_get_attachment_image(
+				$logo_id,
+				'medium',
+				false,
+				array(
+					'class'    => 'hero-scene__brand-image',
+					'alt'      => $site_name,
+					'decoding' => 'async',
+				)
+			);
+			if ( $image ) {
+				return $image;
 			}
 		}
 	}
 
-	if ( empty( $slides ) ) {
-		$slides = paperia_get_default_hero_slides();
-	}
-
-	return $slides;
+	return sprintf(
+		'<img src="%1$s" alt="%2$s" class="hero-scene__brand-image" width="120" height="120" decoding="async">',
+		esc_url( PAPERIA_URI . '/assets/images/hero/brand.png' ),
+		esc_attr( $site_name )
+	);
 }
