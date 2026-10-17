@@ -1,0 +1,44 @@
+---
+description: ACF field groups, Options pages, and Local JSON conventions for Paperia
+globs: wordpress/wp-content/themes/paperia/**/*.{php,json}
+alwaysApply: false
+---
+
+# Paperia ACF
+
+Handle custom fields and theme options with **Advanced Custom Fields** (ACF Pro if Options pages / flexible content are needed).
+
+## Local JSON
+
+- Save field groups under `wordpress/wp-content/themes/paperia/acf-json/`.
+- Register the save/load path in `inc/acf.php` so groups are versioned in git.
+- Prefer syncing from JSON over editing only in the WP admin without export.
+
+## Options vs fields
+
+- Site-wide settings (logo variants, social links, header/footer content, default theme mode): ACF **Options** page(s).
+- Page/post-specific content (hero, sections, CTAs): field groups on the relevant post types/templates.
+- Never hardcode content that editors should change.
+
+## PHP usage
+
+```php
+// ❌ BAD
+$phone = $_POST['phone'];
+
+// ✅ GOOD — Options
+$phone = function_exists( 'get_field' ) ? get_field( 'phone', 'option' ) : '';
+
+// ✅ GOOD — current post
+$hero_title = get_field( 'hero_title' );
+echo esc_html( $hero_title );
+```
+
+- Guard with `function_exists( 'get_field' )` when the theme must not fatally error without ACF.
+- Escape all ACF output (`esc_html`, `esc_url`, `wp_kses_post`, etc.).
+- Keep field names prefixed and readable: `paperia_hero_title`, or grouped under clear labels in ACF UI with simple keys like `hero_title`.
+
+## Organization
+
+- Register Options pages and JSON paths in `inc/acf.php`.
+- Keep flexible/section rendering in `template-parts/` driven by ACF data, not giant `page.php` conditionals.

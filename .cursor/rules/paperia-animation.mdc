@@ -1,0 +1,57 @@
+---
+description: Motion requirements — GSAP, scroll animation, and parallax for Paperia
+alwaysApply: true
+---
+
+# Paperia Animation
+
+Paperia must feel alive. Do not ship static pages with no motion. Prefer purposeful animation over decoration.
+
+## Default toolkit
+
+- Use **GSAP** + **ScrollTrigger** for scroll-driven and timeline animations.
+- Enqueue GSAP from the theme (`assets/js/` or a CDN via `wp_enqueue_script`) and keep animation logic in focused modules under `assets/js/` (e.g. `animations.js`, `parallax.js`).
+- Prefer GSAP when sequencing, staggering, pinning, scrubbing, or coordinating multiple elements. Use CSS transitions only for simple hover/focus states.
+
+## Where to animate
+
+Offer motion wherever it improves hierarchy and presence:
+
+- **Hero / first viewport** — entrance for brand, headline, CTA (staggered, not simultaneous dump).
+- **Sections on scroll** — fade/slide/reveal as content enters the viewport (`ScrollTrigger`).
+- **Lists and cards** — staggered children on enter.
+- **Page transitions / key CTAs** — subtle emphasis, not gimmicks.
+
+Do not animate every element. One clear motion idea per section.
+
+## Parallax backgrounds
+
+Implement **parallax scroll on background layers** (hero and major full-bleed sections):
+
+- Structure markup with a dedicated background layer (e.g. `.section__bg` / `.parallax-bg`) separate from foreground content.
+- Drive background movement with GSAP ScrollTrigger (scrub) so it tracks scroll smoothly.
+- Keep parallax subtle (small translate range). Content must stay readable; never let parallax fight text contrast.
+- Respect `prefers-reduced-motion: reduce` — disable or greatly reduce parallax and scroll animations.
+
+## Quality bar
+
+- At least **2–3 intentional motions** on visually led pages (home, landing, key marketing templates).
+- Motion creates hierarchy and presence — not noise, loops, or constant bouncing.
+- Init animations after DOM ready; kill/cleanup ScrollTriggers on teardown when needed.
+- Avoid layout thrashing; animate `transform` and `opacity`, not width/height/top when possible.
+
+```js
+// ✅ GOOD — scroll reveal + subtle parallax
+gsap.from('.section__content', {
+  y: 40,
+  opacity: 0,
+  duration: 0.8,
+  scrollTrigger: { trigger: '.section', start: 'top 80%' },
+});
+
+gsap.to('.section__bg', {
+  yPercent: 20,
+  ease: 'none',
+  scrollTrigger: { trigger: '.section', scrub: true },
+});
+```

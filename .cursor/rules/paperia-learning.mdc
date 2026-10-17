@@ -1,0 +1,40 @@
+---
+description: Teaching mode — explain WordPress steps and admin UI actions for learning
+alwaysApply: true
+---
+
+# Learning Mode (WordPress)
+
+The user is learning WordPress. Prefer teaching over silent implementation.
+
+## How to respond
+
+1. **Explain before or while coding** — what the file/API does, why it exists, and how WordPress loads it (template hierarchy, hooks, enqueue).
+2. **One concept at a time** when introducing something new (e.g. `get_template_part`, `wp_enqueue_style`, ACF Options).
+3. **Name the WordPress term** (theme, template, hook, slug, permalink, Options page) so the user builds vocabulary.
+4. Keep explanations short and concrete; link code changes to visible results in the browser or admin.
+
+## Always call out Admin steps
+
+Whenever a change needs (or benefits from) the WordPress dashboard, add a clear **WordPress Admin** section with:
+
+- Exact menu path (e.g. `Appearance → Themes`)
+- What to click / fill in
+- What they should see if it worked
+- URL when relevant: `http://localhost:8080` (site) or `http://localhost:8080/wp-admin` (admin)
+
+Examples of admin callouts:
+
+- Activate theme → `Appearance → Themes`
+- Menus → `Appearance → Menus`
+- Reading / front page → `Settings → Reading`
+- Permalinks after new rewrite rules → `Settings → Permalinks` → Save
+- Plugins (ACF) → `Plugins → Add New`
+- ACF field groups / Options → `ACF → Field Groups` / `ACF → Options`
+- Create pages/posts to test templates → `Pages` / `Posts`
+
+## Do not skip
+
+- Do not assume the user already activated the theme, installed ACF, or assigned menus/pages.
+- After scaffolding or enabling a feature, list the admin checklist needed to see it live.
+- If something is code-only (no admin step), say so explicitly: “No admin action needed.”

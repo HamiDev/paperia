@@ -1,0 +1,74 @@
+---
+description: SCSS architecture and light/dark theming for Paperia
+globs: wordpress/wp-content/themes/paperia/**/*.{scss,css}
+alwaysApply: false
+---
+
+# Paperia SCSS
+
+Use the modern Sass module system only:
+
+- Always `@use` / `@forward`
+- Never `@import`
+
+## Structure
+
+```
+assets/scss/
+├── abstracts/
+│   ├── _variables.scss
+│   ├── _colors.scss
+│   ├── _mixins.scss
+│   ├── _functions.scss
+│   └── _breakpoints.scss
+├── base/
+│   ├── _reset.scss
+│   ├── _typography.scss
+│   └── _global.scss
+├── layout/
+│   ├── _header.scss
+│   ├── _footer.scss
+│   └── _grid.scss
+├── components/
+│   ├── _button.scss
+│   ├── _card.scss
+│   ├── _form.scss
+│   ├── _hero.scss
+│   └── _navigation.scss
+├── pages/
+│   ├── _home.scss
+│   ├── _single.scss
+│   └── _archive.scss
+├── utilities/
+│   ├── _helpers.scss
+│   └── _spacing.scss
+├── themes/
+│   ├── _light.scss
+│   └── _dark.scss
+└── styles.scss
+```
+
+Every component lives in its own partial. Compile to `assets/css/styles.css` and enqueue that file.
+
+## Light / dark theme
+
+- Define semantic CSS custom properties (e.g. `--color-bg`, `--color-text`, `--color-accent`) in `_colors.scss`.
+- Map light and dark values in `themes/_light.scss` and `themes/_dark.scss`.
+- Apply via `[data-theme="light"]` / `[data-theme="dark"]` on `html` (or `body`). Prefer `color-scheme` alongside tokens.
+- Respect `prefers-color-scheme` as the default when the user has no saved preference.
+- Components consume tokens only — never hardcode light/dark hex values inside component partials.
+
+```scss
+// ❌ BAD
+.card { background: #fff; color: #111; }
+
+// ✅ GOOD
+.card {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+```
+
+## Variables
+
+Colors, type scale, spacing, radii, and breakpoints live in abstracts. Do not scatter magic numbers in components.

@@ -1,0 +1,62 @@
+---
+description: Paperia WordPress theme architecture, location, and reusable template conventions
+alwaysApply: true
+---
+
+# Paperia Theme
+
+Custom theme slug/name: `paperia`.
+
+Follow **Learning Mode** (`paperia-learning`): explain each step and list WordPress Admin actions whenever the dashboard is involved.
+
+## Location
+
+Develop the theme at:
+
+`wordpress/wp-content/themes/paperia/`
+
+Do not edit default themes (Twenty*). Do not put theme logic in plugins unless it must be site-wide infrastructure.
+
+## Architecture
+
+Keep files small and focused. Prefer WordPress APIs over custom code.
+
+```
+paperia/
+├── style.css                 # Theme header only (compiled CSS is enqueued separately)
+├── functions.php             # Bootstrap only; require includes
+├── index.php
+├── header.php
+├── footer.php
+├── front-page.php
+├── single.php
+├── page.php
+├── archive.php
+├── 404.php
+├── search.php
+├── template-parts/           # Reusable sections only
+│   ├── header/
+│   ├── footer/
+│   ├── content/
+│   └── components/
+├── inc/                      # PHP modules (setup, assets, ACF, helpers)
+├── assets/
+│   ├── scss/                 # Source styles (never edit compiled CSS by hand)
+│   ├── css/                  # Compiled output
+│   ├── js/
+│   └── images/
+└── acf-json/                 # ACF Local JSON (versioned)
+```
+
+## Reuse rules
+
+- Never place large HTML blocks inside page templates.
+- Extract reusable UI into `template-parts/` and load with `get_template_part()`.
+- Every template-part has one job (e.g. site header, card, hero).
+- Share markup via template-parts; share logic via `inc/` helpers.
+- Prefer CSS and WordPress APIs before custom JavaScript for UI chrome and forms.
+- **Exception — motion:** intentional GSAP / ScrollTrigger / parallax JS is required (see `paperia-animation`). Do not leave marketing pages static.
+
+## Customization
+
+Theme options and custom fields use **ACF** (not hardcoding). Colors, typography, header/footer content, and page-specific fields come from ACF Options or field groups.
