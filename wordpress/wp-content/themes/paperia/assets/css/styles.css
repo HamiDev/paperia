@@ -7,6 +7,7 @@
   --color-muted: #6b7280;
   --color-heading: #28966c;
   --color-border: #e5e7eb;
+  --color-input-border: #eef2f0;
   --color-accent: #28966c;
   --color-accent-hover: #1f7a57;
   --color-accent-contrast: #ffffff;
@@ -34,6 +35,7 @@
   --color-muted: #6b7280;
   --color-heading: #28966c;
   --color-border: #e5e7eb;
+  --color-input-border: #eef2f0;
   --color-accent: #28966c;
   --color-accent-hover: #1f7a57;
   --color-accent-contrast: #ffffff;
@@ -60,6 +62,7 @@
     --color-muted: #6b7280;
     --color-heading: #28966c;
     --color-border: #e5e7eb;
+    --color-input-border: #eef2f0;
     --color-accent: #28966c;
     --color-accent-hover: #1f7a57;
     --color-accent-contrast: #ffffff;
@@ -85,6 +88,7 @@
   --color-muted: #a8b3ac;
   --color-heading: #5dcaa0;
   --color-border: #2f3a33;
+  --color-input-border: #3d4b43;
   --color-accent: #3eb887;
   --color-accent-hover: #5dcaa0;
   --color-accent-contrast: #062216;
@@ -111,6 +115,7 @@
     --color-muted: #a8b3ac;
     --color-heading: #5dcaa0;
     --color-border: #2f3a33;
+    --color-input-border: #3d4b43;
     --color-accent: #3eb887;
     --color-accent-hover: #5dcaa0;
     --color-accent-contrast: #062216;
@@ -720,6 +725,24 @@ button {
   font: inherit;
 }
 
+.woocommerce,
+.woocommerce-page {
+  --wc-form-border-color: var(--color-input-border);
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=search],
+input[type=tel],
+input[type=url],
+input[type=number],
+input[type=date],
+textarea,
+select {
+  border-color: var(--color-input-border);
+}
+
 .woocommerce form .form-row,
 .woocommerce-form-row,
 .woocommerce-address-fields__field-wrapper .form-row {
@@ -742,6 +765,9 @@ button {
   text-decoration: none;
 }
 
+.woocommerce form .form-row .input-text,
+.woocommerce form .form-row select,
+.woocommerce form .form-row textarea,
 .woocommerce form .input-text,
 .woocommerce-Input,
 .woocommerce form input.input-text,
@@ -749,24 +775,31 @@ button {
 .woocommerce form select,
 .woocommerce-address-fields input.input-text,
 .woocommerce-address-fields select,
-.woocommerce-address-fields textarea {
+.woocommerce-address-fields textarea,
+.woocommerce-page form .form-row .input-text,
+.woocommerce-page form .form-row select,
+.woocommerce-page form .form-row textarea {
   display: block;
   width: 100%;
   max-width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-input-border);
   border-radius: 0.75rem;
   background: var(--color-surface);
   color: var(--color-text);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.woocommerce form .form-row .input-text:hover,
+.woocommerce form .form-row select:hover,
 .woocommerce form .input-text:hover,
 .woocommerce-Input:hover,
 .woocommerce form select:hover,
 .woocommerce-address-fields input.input-text:hover,
-.woocommerce-address-fields select:hover {
-  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
+.woocommerce-address-fields select:hover,
+.woocommerce-page form .form-row .input-text:hover,
+.woocommerce-page form .form-row select:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-input-border));
 }
 
 .woocommerce form .input-text:focus,
@@ -6611,6 +6644,7 @@ a.paperia-account__nav-link[aria-current=page]:not(.button) .paperia-account__na
 
 .paperia-account-welcome {
   display: flex;
+  flex-flow: row nowrap;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
@@ -6624,8 +6658,10 @@ a.paperia-account__nav-link[aria-current=page]:not(.button) .paperia-account__na
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  align-self: center;
   width: 3.25rem;
   height: 3.25rem;
+  overflow: hidden;
   border-radius: 50%;
   background: var(--color-accent);
   color: var(--color-accent-contrast);
@@ -6634,22 +6670,53 @@ a.paperia-account__nav-link[aria-current=page]:not(.button) .paperia-account__na
   letter-spacing: 0.02em;
 }
 
+.woocommerce .paperia-account-welcome__avatar img,
+.paperia-account-welcome__avatar-img {
+  display: block;
+  width: 3.25rem;
+  height: 3.25rem;
+  max-width: none;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .paperia-account-welcome__greeting {
-  margin: 0 0 0.2rem;
+  margin: 0;
+  align-self: center;
   color: var(--color-text);
   font-size: 1.2rem;
   font-weight: 700;
+  line-height: 1.2;
 }
 
-.paperia-account-welcome__meta {
-  margin: 0;
-  color: var(--color-muted);
+.paperia-account__content a.paperia-account-welcome__logout {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
   font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(40, 150, 108, 0.08);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.paperia-account-welcome__meta a {
-  font-weight: 600;
-  text-decoration: none;
+.paperia-account__content a.paperia-account-welcome__logout:hover,
+.paperia-account__content a.paperia-account-welcome__logout:focus-visible {
+  background: var(--color-pastel-pink);
+  color: #b42318;
+}
+
+.paperia-account-welcome__logout-icon {
+  font-size: 1.05rem;
+  line-height: 1;
 }
 
 .paperia-account-dashboard__intro {
@@ -6934,31 +7001,49 @@ mark.order-status {
 
 .paperia-account-form__row--split {
   display: grid;
-  gap: 0;
+  gap: 1rem;
+  width: 100%;
 }
 @media (min-width: 36rem) {
   .paperia-account-form__row--split {
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
   }
 }
 
+.woocommerce .paperia-account-form .form-row-first,
+.woocommerce .paperia-account-form .form-row-last,
+.woocommerce .paperia-account-form .form-row-wide,
+.woocommerce-page .paperia-account-form .form-row-first,
+.woocommerce-page .paperia-account-form .form-row-last,
+.woocommerce-page .paperia-account-form .form-row-wide {
+  float: none;
+  clear: none;
+  width: 100%;
+  margin-inline: 0;
+}
+
 .paperia-account-form__row--split .form-row {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .paperia-account-form__fieldset {
-  margin: 1.5rem 0;
+  margin: 0;
   padding: 1.5rem;
   border: 1px solid var(--color-border);
   border-radius: 1.25rem;
   background: var(--color-bg-soft);
+  min-inline-size: 0;
 }
 
 .paperia-account-form__fieldset legend {
-  padding-inline: 0.5rem;
+  display: block;
+  width: 100%;
+  margin: 0 0 0.5rem;
+  padding: 0;
   color: var(--color-heading);
+  font-size: 1.05rem;
   font-weight: 700;
+  line-height: 1.4;
 }
 
 .paperia-account-form__hint {
@@ -6966,11 +7051,203 @@ mark.order-status {
   margin-top: 0.5rem;
   color: var(--color-muted);
   font-size: 0.85rem;
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.paperia-account-form__hint--section {
+  margin: 0 0 1rem;
 }
 
 .paperia-account-form__actions {
-  margin-top: 1rem;
-  margin-bottom: 0;
+  margin: 0;
+}
+
+.paperia-account-form--edit-account form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.paperia-account-form--edit-account .paperia-account-form__section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.woocommerce .paperia-account-form--edit-account form .form-row,
+.woocommerce-page .paperia-account-form--edit-account form .form-row {
+  margin: 0;
+  padding: 0;
+}
+
+.woocommerce .paperia-account-form--edit-account form .form-row label,
+.woocommerce-page .paperia-account-form--edit-account form .form-row label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.woocommerce .paperia-account-form--edit-account form .form-row:not(:has(.countrycode)) .input-text,
+.woocommerce .paperia-account-form--edit-account form .password-input,
+.woocommerce-page .paperia-account-form--edit-account form .form-row:not(:has(.countrycode)) .input-text,
+.woocommerce-page .paperia-account-form--edit-account form .password-input {
+  width: 100%;
+  max-width: none;
+}
+
+.woocommerce .paperia-account-form--edit-account form .input-text,
+.woocommerce-page .paperia-account-form--edit-account form .input-text {
+  min-height: 3rem;
+  padding: 0.8rem 1rem;
+  background: var(--color-surface);
+}
+
+.woocommerce .paperia-account-form--edit-account input[type=email],
+.woocommerce .paperia-account-form--edit-account input[type=tel],
+.woocommerce-page .paperia-account-form--edit-account input[type=email],
+.woocommerce-page .paperia-account-form--edit-account input[type=tel] {
+  direction: ltr;
+  text-align: right;
+}
+
+.paperia-account-form--edit-account br,
+.paperia-account-form--edit-account #pinova_mobile_description {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.paperia-account-form--edit-account br {
+  display: none;
+}
+
+.paperia-account-form--edit-account :is(.digcon, .digits-form-row, .dig_wc_countrycodecontainer) {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.woocommerce .paperia-account-form--edit-account .countrycode,
+.woocommerce-page .paperia-account-form--edit-account .countrycode {
+  flex: 0 0 4.75rem;
+  width: 4.75rem;
+  max-width: 4.75rem;
+  margin: 0;
+  padding-inline: 0.4rem;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  border-inline-end-width: 0;
+  text-align: center;
+}
+
+.woocommerce .paperia-account-form--edit-account .form-row:has(.countrycode) .input-text:not(.countrycode),
+.woocommerce-page .paperia-account-form--edit-account .form-row:has(.countrycode) .input-text:not(.countrycode) {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.woocommerce .paperia-account-form--edit-account .password-input,
+.woocommerce-page .paperia-account-form--edit-account .password-input {
+  display: block;
+  position: relative;
+}
+
+.woocommerce .paperia-account-form--edit-account .password-input .input-text,
+.woocommerce-page .paperia-account-form--edit-account .password-input .input-text {
+  padding-inline-end: 3rem;
+}
+
+.woocommerce .paperia-account-form--edit-account .show-password-input,
+.woocommerce-page .paperia-account-form--edit-account .show-password-input {
+  position: absolute;
+  inset-inline-end: 0.85rem;
+  inset-inline-start: auto;
+  top: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-50%);
+  background: transparent;
+  box-shadow: none;
+}
+
+.woocommerce .paperia-account-form--edit-account .woocommerce-password-strength,
+.woocommerce-page .paperia-account-form--edit-account .woocommerce-password-strength {
+  --paperia-strength: 0%;
+  --paperia-strength-color: var(--color-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.45rem;
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: start;
+}
+.woocommerce .paperia-account-form--edit-account .woocommerce-password-strength::before,
+.woocommerce-page .paperia-account-form--edit-account .woocommerce-password-strength::before {
+  content: "";
+  display: block;
+  height: 0.4rem;
+  border-radius: 999px;
+  background-color: var(--color-input-border);
+  background-image: linear-gradient(var(--paperia-strength-color), var(--paperia-strength-color));
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: var(--paperia-strength) 100%;
+}
+
+.woocommerce .paperia-account-form--edit-account .woocommerce-password-strength.short,
+.woocommerce-page .paperia-account-form--edit-account .woocommerce-password-strength.short {
+  --paperia-strength: 22%;
+  --paperia-strength-color: #b42318;
+  color: #b42318;
+}
+
+.woocommerce .paperia-account-form--edit-account .woocommerce-password-strength.bad,
+.woocommerce-page .paperia-account-form--edit-account .woocommerce-password-strength.bad {
+  --paperia-strength: 48%;
+  --paperia-strength-color: #c2410c;
+  color: #c2410c;
+}
+
+.woocommerce .paperia-account-form--edit-account .woocommerce-password-strength.good,
+.woocommerce-page .paperia-account-form--edit-account .woocommerce-password-strength.good {
+  --paperia-strength: 74%;
+  --paperia-strength-color: #a16207;
+  color: #a16207;
+}
+
+.woocommerce .paperia-account-form--edit-account .woocommerce-password-strength.strong,
+.woocommerce-page .paperia-account-form--edit-account .woocommerce-password-strength.strong {
+  --paperia-strength: 100%;
+  --paperia-strength-color: var(--color-accent);
+  color: var(--color-accent-hover);
+}
+
+.woocommerce .paperia-account-form--edit-account .woocommerce-password-hint,
+.woocommerce-page .paperia-account-form--edit-account .woocommerce-password-hint {
+  display: block;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.paperia-account-form--edit-account .paperia-account-form__actions .button {
+  min-width: 10rem;
+  padding-inline: 1.5rem;
 }
 
 .paperia-account-page--logged-out .woocommerce {
@@ -7037,6 +7314,32 @@ mark.order-status {
   gap: 0.75rem;
 }
 
+.paperia-account__content a.paperia-account-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 1.5rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  background: var(--color-pastel-mint);
+  color: var(--color-accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.paperia-account__content a.paperia-account-back:hover,
+.paperia-account__content a.paperia-account-back:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.paperia-account-back__icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
 .paperia-account-view-order__status {
   margin: 0 0 1.5rem;
   padding: 1rem;
@@ -7084,33 +7387,97 @@ mark.order-status {
   font-size: 0.85rem;
 }
 
-.woocommerce-message,
-.woocommerce-info,
-.woocommerce-error,
+.woocommerce .woocommerce-message,
+.woocommerce .woocommerce-info,
+.woocommerce .woocommerce-error,
+.woocommerce-page .woocommerce-message,
+.woocommerce-page .woocommerce-info,
+.woocommerce-page .woocommerce-error,
 .woocommerce-notices-wrapper .woocommerce-message,
 .woocommerce-notices-wrapper .woocommerce-info,
 .woocommerce-notices-wrapper .woocommerce-error {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.75rem 1rem;
+  clear: both;
   margin: 0 0 1.5rem;
   padding: 1rem 1.5rem;
-  border-radius: 0.75rem;
-  border-inline-start: 3px solid var(--color-accent);
+  border: 0;
+  border-radius: 1.25rem;
   background: var(--color-pastel-mint);
   color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.7;
   list-style: none;
 }
+.woocommerce .woocommerce-message::before, .woocommerce .woocommerce-message::after,
+.woocommerce .woocommerce-info::before,
+.woocommerce .woocommerce-info::after,
+.woocommerce .woocommerce-error::before,
+.woocommerce .woocommerce-error::after,
+.woocommerce-page .woocommerce-message::before,
+.woocommerce-page .woocommerce-message::after,
+.woocommerce-page .woocommerce-info::before,
+.woocommerce-page .woocommerce-info::after,
+.woocommerce-page .woocommerce-error::before,
+.woocommerce-page .woocommerce-error::after,
+.woocommerce-notices-wrapper .woocommerce-message::before,
+.woocommerce-notices-wrapper .woocommerce-message::after,
+.woocommerce-notices-wrapper .woocommerce-info::before,
+.woocommerce-notices-wrapper .woocommerce-info::after,
+.woocommerce-notices-wrapper .woocommerce-error::before,
+.woocommerce-notices-wrapper .woocommerce-error::after {
+  content: none;
+  display: none;
+}
 
-.woocommerce-error {
-  border-inline-start-color: #b42318;
+.woocommerce .woocommerce-info,
+.woocommerce-page .woocommerce-info,
+.woocommerce-notices-wrapper .woocommerce-info {
+  background: linear-gradient(135deg, var(--color-pastel-mint) 0%, var(--color-hero-bg) 100%);
+}
+
+.woocommerce .woocommerce-error,
+.woocommerce-page .woocommerce-error,
+.woocommerce-notices-wrapper .woocommerce-error {
   background: var(--color-pastel-pink);
 }
 
-.woocommerce-info {
-  border-inline-start-color: #1565c0;
-  background: var(--color-pastel-blue);
+.woocommerce .woocommerce-message .button,
+.woocommerce .woocommerce-info .button,
+.woocommerce .woocommerce-error .button,
+.woocommerce-page .woocommerce-message .button,
+.woocommerce-page .woocommerce-info .button,
+.woocommerce-page .woocommerce-error .button {
+  float: none;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.55rem 1.15rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.woocommerce .woocommerce-message .button:hover,
+.woocommerce .woocommerce-message .button:focus-visible,
+.woocommerce .woocommerce-info .button:hover,
+.woocommerce .woocommerce-info .button:focus-visible,
+.woocommerce .woocommerce-error .button:hover,
+.woocommerce .woocommerce-error .button:focus-visible,
+.woocommerce-page .woocommerce-message .button:hover,
+.woocommerce-page .woocommerce-message .button:focus-visible,
+.woocommerce-page .woocommerce-info .button:hover,
+.woocommerce-page .woocommerce-info .button:focus-visible,
+.woocommerce-page .woocommerce-error .button:hover,
+.woocommerce-page .woocommerce-error .button:focus-visible {
+  background: var(--color-accent-hover);
+  color: var(--color-accent-contrast);
 }
 
 .paperia-account-empty .woocommerce-info,
