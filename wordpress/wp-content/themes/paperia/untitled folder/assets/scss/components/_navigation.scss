@@ -1,0 +1,33 @@
+.site-nav__list,
+.footer-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+
+.site-nav__list a,
+.footer-nav__list a {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.site-nav__list a:hover,
+.footer-nav__list a:hover {
+  color: var(--color-accent);
+}
+
+.theme-toggle {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}

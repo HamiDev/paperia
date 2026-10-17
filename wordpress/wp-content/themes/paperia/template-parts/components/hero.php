@@ -4,7 +4,7 @@
  *
  * Concept: a layered illustration (theme images) with HTML copy in the center.
  * Only the headline comes from ACF (`hero_title`); subtitle and CTA are theme defaults.
- * GSAP (hero-scene.js) animates entrance, ambient drift, and subtle parallax.
+ * GSAP (hero-scene.js) animates entrance, spiral plane flights, and subtle parallax.
  *
  * @package Paperia
  */
@@ -104,7 +104,12 @@ $paperia_hero_base     = PAPERIA_URI . '/assets/images/hero';
 
 		<div class="hero-scene__content" data-hero-content>
 			<div class="hero-scene__brand" data-hero-brand>
-				<?php echo paperia_get_hero_brand_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper. ?>
+				<span
+					class="hero-scene__brand-player"
+					data-lottie
+					data-src="<?php echo esc_url( paperia_get_lottie_mark_url() ); ?>"
+					aria-hidden="true"
+				></span>
 			</div>
 
 			<?php if ( $paperia_hero_title ) : ?>

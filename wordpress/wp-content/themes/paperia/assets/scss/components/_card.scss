@@ -66,30 +66,57 @@
   line-height: 1.5;
 }
 
-.product-card__title a {
+.product-card .product-card__title a {
   color: var(--color-text);
   text-decoration: none;
 }
 
+.product-card .product-card__title a:hover,
+.product-card .product-card__title a:focus-visible {
+  color: var(--color-text);
+}
+
 .product-card__pricing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $space-2;
+}
+
+// WooCommerce "left with space" is authored left-to-right. Isolate it so RTL
+// does not move the currency unit to the right of the amount.
+.product-card__price .woocommerce-Price-amount {
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+.product-card__price--sale,
+.product-card__price--sale .woocommerce-Price-amount {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.product-card__offer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: $space-2;
 }
 
-.product-card__price--sale {
-  color: var(--color-heading);
-  font-weight: 700;
-}
-
 .product-card__price--regular {
   color: var(--color-muted);
-  text-decoration: line-through;
   font-size: 0.9rem;
 }
 
-.product-card__badge {
+.product-card__price--regular,
+.product-card__price--regular .woocommerce-Price-amount {
+  text-decoration: line-through;
+}
+
+.product-card__badge,
+.product-page__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -103,6 +130,16 @@
 }
 
 .product-card__cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   margin-block-start: auto;
+  text-align: center;
+}
+
+.product-card__cart > [class^='icon-'] {
+  position: absolute;
+  inset-inline-start: 1.15rem;
 }

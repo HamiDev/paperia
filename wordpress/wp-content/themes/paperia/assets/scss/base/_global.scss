@@ -35,6 +35,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  // Keep the leaf field (z-index: -1) above the page background
+  // and below header, main, and footer.
+  isolation: isolate;
 }
 
 .site-main {

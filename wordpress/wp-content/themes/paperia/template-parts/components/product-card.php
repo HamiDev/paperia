@@ -20,14 +20,10 @@ if ( ! $paperia_product || ! is_a( $paperia_product, 'WC_Product' ) ) {
 $paperia_permalink = $paperia_product->get_permalink();
 $paperia_name      = $paperia_product->get_name();
 $paperia_image_id  = $paperia_product->get_image_id();
-$paperia_regular   = $paperia_product->get_regular_price();
-$paperia_sale      = $paperia_product->get_sale_price();
-$paperia_on_sale   = $paperia_product->is_on_sale() && '' !== $paperia_sale && '' !== $paperia_regular;
-$paperia_discount  = 0;
-
-if ( $paperia_on_sale && (float) $paperia_regular > 0 ) {
-	$paperia_discount = (int) round( ( ( (float) $paperia_regular - (float) $paperia_sale ) / (float) $paperia_regular ) * 100 );
-}
+$paperia_regular  = $paperia_product->get_regular_price();
+$paperia_sale     = $paperia_product->get_sale_price();
+$paperia_on_sale  = $paperia_product->is_on_sale() && '' !== $paperia_sale && '' !== $paperia_regular;
+$paperia_discount = paperia_get_sale_percent( $paperia_product );
 ?>
 <article class="product-card">
 	<a class="product-card__media" href="<?php echo esc_url( $paperia_permalink ); ?>">
@@ -59,12 +55,14 @@ if ( $paperia_on_sale && (float) $paperia_regular > 0 ) {
 				<span class="product-card__price product-card__price--sale">
 					<?php echo wp_kses_post( wc_price( $paperia_sale ) ); ?>
 				</span>
-				<span class="product-card__price product-card__price--regular">
-					<?php echo wp_kses_post( wc_price( $paperia_regular ) ); ?>
-				</span>
-				<?php if ( $paperia_discount > 0 ) : ?>
-					<span class="product-card__badge"><?php echo esc_html( $paperia_discount . '%' ); ?></span>
-				<?php endif; ?>
+				<div class="product-card__offer">
+					<span class="product-card__price product-card__price--regular">
+						<?php echo wp_kses_post( wc_price( $paperia_regular ) ); ?>
+					</span>
+					<?php if ( $paperia_discount > 0 ) : ?>
+						<span class="product-card__badge"><?php echo esc_html( $paperia_discount . '%' ); ?></span>
+					<?php endif; ?>
+				</div>
 			<?php else : ?>
 				<span class="product-card__price product-card__price--sale">
 					<?php echo wp_kses_post( $paperia_product->get_price_html() ); ?>

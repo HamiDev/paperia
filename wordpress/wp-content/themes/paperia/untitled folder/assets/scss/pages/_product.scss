@@ -1,0 +1,652 @@
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+// Single product. WooCommerce floats the gallery and summary; this grid
+// replaces that. In RTL the summary sits on the right and the gallery on the left.
+
+.product-page__inner {
+  width: min(100% - 2rem, $content-width);
+  margin-inline: auto;
+  padding-block: $space-6 $space-8;
+}
+
+.product-page .woocommerce-breadcrumb {
+  margin: 0 0 $space-5;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.product-page .woocommerce-breadcrumb a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.product-page .woocommerce-breadcrumb a:hover,
+.product-page .woocommerce-breadcrumb a:focus-visible {
+  color: var(--color-heading);
+}
+
+.product-page .woocommerce-notices-wrapper:empty {
+  display: none;
+}
+
+.product-page .woocommerce-message,
+.product-page .woocommerce-info,
+.product-page .woocommerce-error {
+  margin: 0 0 $space-5;
+  padding: 0.9rem 1.15rem;
+  border: 0;
+  border-inline-start: 3px solid var(--color-accent);
+  border-radius: $radius-md;
+  background: var(--color-pastel-mint);
+  color: var(--color-text);
+  list-style: none;
+}
+
+.product-page .woocommerce-error {
+  border-inline-start-color: #b42318;
+  background: var(--color-pastel-pink);
+}
+
+.product-page .woocommerce-message .button,
+.product-page .woocommerce-info .button,
+.product-page .woocommerce-error .button {
+  float: none;
+  margin-inline-start: $space-3;
+}
+
+body.paperia-product div.product {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: $space-5;
+  align-items: start;
+  margin: 0;
+
+  &::before,
+  &::after {
+    content: none;
+    display: none;
+  }
+}
+
+body.paperia-product div.product > .summary {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+body.paperia-product div.product > .woocommerce-product-gallery,
+body.paperia-product div.product > span.onsale {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+body.paperia-product div.product > .woocommerce-tabs,
+body.paperia-product div.product > .upsells,
+body.paperia-product div.product > .related,
+body.paperia-product div.product > .product-rail {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+
+@include respond-up($bp-md) {
+  body.paperia-product div.product {
+    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.92fr);
+    column-gap: $space-7;
+    row-gap: $space-7;
+  }
+
+  body.paperia-product div.product > .summary {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  body.paperia-product div.product > .woocommerce-product-gallery,
+  body.paperia-product div.product > span.onsale {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+body.paperia-product div.product div.summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $space-4;
+  float: none;
+  width: auto;
+  margin: 0;
+}
+
+body.paperia-product div.product div.summary > * {
+  margin: 0;
+}
+
+body.paperia-product div.product div.summary > .price,
+body.paperia-product div.product div.summary > form.cart,
+body.paperia-product div.product div.summary > .product_meta,
+body.paperia-product div.product div.summary > .woocommerce-product-details__short-description {
+  width: 100%;
+}
+
+body.paperia-product div.product .product_title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+body.paperia-product div.product p.price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-2 $space-3;
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.45rem, 2vw, 1.75rem);
+  font-weight: 800;
+}
+
+body.paperia-product div.product p.price .woocommerce-Price-amount {
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+body.paperia-product div.product p.price ins {
+  order: 1;
+  background: none;
+  color: var(--color-text);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+body.paperia-product div.product p.price del {
+  order: 2;
+  color: var(--color-muted);
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 1;
+}
+
+body.paperia-product div.product p.price del .woocommerce-Price-amount {
+  text-decoration: line-through;
+}
+
+body.paperia-product div.product p.price .product-page__badge {
+  order: 3;
+}
+
+body.paperia-product div.product .woocommerce-product-details__short-description {
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+body.paperia-product div.product .woocommerce-product-details__short-description > :last-child {
+  margin-bottom: 0;
+}
+
+body.paperia-product div.product p.stock {
+  margin: 0;
+  padding: 0.3rem 0.8rem;
+  border-radius: $radius-pill;
+  background: var(--color-pastel-mint);
+  color: var(--color-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+body.paperia-product div.product p.stock.out-of-stock {
+  background: var(--color-pastel-pink);
+  color: var(--color-text);
+}
+
+body.paperia-product div.product form.cart {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: $space-3;
+  width: 100%;
+  margin: 0;
+}
+
+body.paperia-product div.product form.cart .quantity {
+  align-self: start;
+}
+
+@include respond-up($bp-sm) {
+  body.paperia-product div.product form.cart {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  body.paperia-product div.product form.cart .quantity {
+    align-self: center;
+  }
+}
+
+body.paperia-product div.product form.cart div.quantity {
+  display: inline-flex;
+  align-items: center;
+  float: none;
+  margin: 0;
+  direction: ltr;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-pill;
+  background: var(--color-surface);
+}
+
+body.paperia-product div.product form.cart .quantity:has(input[readonly]) .product-qty__btn,
+body.paperia-product div.product form.cart .quantity:has(input:disabled) .product-qty__btn {
+  display: none;
+}
+
+.product-qty__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-heading);
+  cursor: pointer;
+}
+
+.product-qty__btn:hover,
+.product-qty__btn:focus-visible {
+  color: var(--color-accent-hover);
+}
+
+body.paperia-product div.product form.cart .qty {
+  width: 2.5rem;
+  height: 2.6rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+  text-align: center;
+  appearance: textfield;
+}
+
+body.paperia-product div.product form.cart .qty::-webkit-outer-spin-button,
+body.paperia-product div.product form.cart .qty::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+body.paperia-product div.product form.cart .single_add_to_cart_button {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 2.75rem;
+}
+
+@include respond-up($bp-sm) {
+  body.paperia-product div.product form.cart .single_add_to_cart_button {
+    width: auto;
+  }
+}
+
+body.paperia-product div.product form.cart .single_add_to_cart_button::before {
+  font-family: 'icomoon';
+  content: '\ece0';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+body.paperia-product div.product form.cart .single_add_to_cart_button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+body.paperia-product div.product table.variations {
+  width: 100%;
+  margin: 0 0 $space-3;
+  border: 0;
+}
+
+body.paperia-product div.product table.variations td,
+body.paperia-product div.product table.variations th {
+  padding: $space-2 0;
+  border: 0;
+  text-align: start;
+  vertical-align: middle;
+}
+
+body.paperia-product div.product table.variations select {
+  width: 100%;
+}
+
+body.paperia-product div.product .product_meta {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin: 0;
+  padding-top: $space-4;
+  border-top: 1px dashed color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+body.paperia-product div.product .product_meta > span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-2;
+}
+
+body.paperia-product div.product .product_meta a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.7rem;
+  border-radius: $radius-pill;
+  background: var(--color-pastel-mint);
+  color: var(--color-heading);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+body.paperia-product div.product .product_meta a:hover,
+body.paperia-product div.product .product_meta a:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+body.paperia-product div.product div.images {
+  position: relative;
+  z-index: 1;
+  float: none;
+  width: 100%;
+  margin: 0;
+  padding: $space-4;
+  border-radius: $radius-lg;
+  background:
+    radial-gradient(ellipse at 50% 40%, var(--color-surface) 0%, var(--color-pastel-mint) 72%);
+}
+
+// Before the slider script runs, keep extra photos as a thumbnail row
+// so they do not stack into a tall column.
+body.paperia-product div.product div.images:not(.flexslider) .woocommerce-product-gallery__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: $space-3;
+}
+
+body.paperia-product div.product div.images:not(.flexslider) .woocommerce-product-gallery__image:first-child {
+  width: 100%;
+}
+
+body.paperia-product div.product div.images:not(.flexslider) .woocommerce-product-gallery__image:not(:first-child) {
+  width: 4.5rem;
+}
+
+body.paperia-product div.product div.images:not(.flexslider) .woocommerce-product-gallery__image:not(:first-child) img {
+  width: 100%;
+  max-height: none;
+  border-radius: $radius-md;
+}
+
+body.paperia-product div.product div.images .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:first-child > a,
+body.paperia-product div.product div.images .flex-viewport a {
+  display: flex;
+  justify-content: center;
+}
+
+body.paperia-product div.product div.images .woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:first-child img,
+body.paperia-product div.product div.images .flex-viewport .woocommerce-product-gallery__image img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: min(32rem, 68vh);
+  object-fit: contain;
+}
+
+body.paperia-product div.product > span.onsale {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  z-index: 3;
+  align-self: start;
+  justify-self: start;
+  width: fit-content;
+  min-width: 0;
+  height: fit-content;
+  min-height: 0;
+  margin: $space-5;
+  padding: 0.3rem 0.7rem;
+  border-radius: $radius-pill;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+body.paperia-product div.product div.images .woocommerce-product-gallery__trigger {
+  top: $space-4;
+  right: auto;
+  left: auto;
+  inset-inline-end: $space-4;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: var(--color-surface);
+  box-shadow: 0 6px 16px rgb(40 150 108 / 12%);
+}
+
+body.paperia-product div.product div.images .woocommerce-product-gallery__trigger::before {
+  border-color: var(--color-heading);
+}
+
+body.paperia-product div.product div.images .woocommerce-product-gallery__trigger::after {
+  background: var(--color-heading);
+}
+
+body.paperia-product div.product div.images .flex-viewport,
+body.paperia-product div.product div.images .woocommerce-product-gallery__image img {
+  border-radius: $radius-md;
+}
+
+body.paperia-product div.product div.images .flex-control-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $space-3;
+  margin: $space-4 0 0;
+  padding: 0;
+  overflow: visible;
+}
+
+body.paperia-product div.product div.images .flex-control-thumbs li {
+  float: none;
+  clear: none;
+  width: 4.5rem;
+  margin: 0;
+}
+
+body.paperia-product div.product .woocommerce-product-gallery--columns-3 .flex-control-thumbs li:nth-child(3n + 1),
+body.paperia-product div.product .woocommerce-product-gallery--columns-4 .flex-control-thumbs li:nth-child(4n + 1),
+body.paperia-product div.product .woocommerce-product-gallery--columns-5 .flex-control-thumbs li:nth-child(5n + 1) {
+  clear: none;
+}
+
+body.paperia-product div.product div.images .flex-control-thumbs li img {
+  width: 100%;
+  height: auto;
+  border: 2px solid transparent;
+  border-radius: $radius-md;
+  opacity: 0.72;
+}
+
+body.paperia-product div.product div.images .flex-control-thumbs li img.flex-active,
+body.paperia-product div.product div.images .flex-control-thumbs li img:hover,
+body.paperia-product div.product div.images .flex-control-thumbs li img:focus-visible {
+  border-color: var(--color-accent);
+  opacity: 1;
+}
+
+body.paperia-product div.product .woocommerce-tabs {
+  margin: $space-3 0 0;
+  padding: $space-5;
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 8px 24px rgb(40 150 108 / 6%);
+
+  @include respond-up($bp-md) {
+    padding: $space-6;
+  }
+}
+
+body.paperia-product div.product .woocommerce-tabs ul.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  position: static;
+  margin: 0 0 $space-5;
+  padding: 0;
+  list-style: none;
+  overflow: visible;
+
+  &::before,
+  &::after {
+    content: none;
+    display: none;
+    border: 0;
+  }
+}
+
+body.paperia-product div.product .woocommerce-tabs ul.tabs li {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: $radius-pill;
+  background: var(--color-bg-soft);
+  position: static;
+  z-index: auto;
+
+  &::before,
+  &::after {
+    content: none;
+    display: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  a {
+    display: inline-flex;
+    padding: 0.55rem 1.1rem;
+    border-radius: $radius-pill;
+    color: var(--color-text);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  &.active {
+    background: var(--color-accent);
+    border-color: transparent;
+
+    a {
+      color: var(--color-accent-contrast);
+    }
+  }
+}
+
+body.paperia-product div.product .woocommerce-tabs .panel {
+  margin: 0;
+  padding: 0;
+  color: var(--color-text);
+  font-size: 1.02rem;
+  line-height: 1.95;
+}
+
+body.paperia-product div.product .woocommerce-tabs .woocommerce-Tabs-panel {
+  display: none;
+}
+
+body.paperia-product div.product .woocommerce-tabs .woocommerce-Tabs-panel:first-of-type {
+  display: block;
+}
+
+body.paperia-product div.product .woocommerce-tabs .panel h2,
+body.paperia-product div.product .woocommerce-tabs .panel h3,
+body.paperia-product div.product .woocommerce-tabs .panel h4 {
+  margin-top: $space-5;
+  color: var(--color-heading);
+  line-height: 1.45;
+}
+
+body.paperia-product div.product .woocommerce-tabs .panel > :first-child {
+  margin-top: 0;
+}
+
+body.paperia-product div.product .woocommerce-tabs .panel a {
+  color: var(--color-accent);
+}
+
+body.paperia-product div.product table.shop_attributes {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-collapse: collapse;
+}
+
+body.paperia-product div.product table.shop_attributes th,
+body.paperia-product div.product table.shop_attributes td {
+  padding: 0.85rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  background: transparent;
+  font-style: normal;
+  text-align: start;
+}
+
+body.paperia-product div.product table.shop_attributes th {
+  width: 9rem;
+  padding-inline-end: $space-4;
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+body.paperia-product div.product table.shop_attributes td p {
+  margin: 0;
+}
+
+.product-rail {
+  margin-top: $space-6;
+}
+
+.product-rail__header {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-5;
+}
+
+.product-rail__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  white-space: nowrap;
+}
+
+.product-rail__rule {
+  flex: 1;
+  height: 0;
+  border-top: 2px dashed var(--color-accent);
+  opacity: 0.45;
+}

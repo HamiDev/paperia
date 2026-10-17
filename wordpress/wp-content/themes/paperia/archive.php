@@ -1,6 +1,6 @@
 <?php
 /**
- * Archive template (categories, tags, dates, custom post type archives).
+ * Archive template (categories, tags, dates, authors).
  *
  * @package Paperia
  */
@@ -8,22 +8,21 @@
 get_header();
 ?>
 
-<div class="container">
-	<header class="archive-header">
-		<?php the_archive_title( '<h1 class="archive-header__title">', '</h1>' ); ?>
-		<?php the_archive_description( '<div class="archive-header__desc">', '</div>' ); ?>
-	</header>
+<div class="blog">
+	<?php
+	get_template_part(
+		'template-parts/blog/header',
+		null,
+		array(
+			'title'       => get_the_archive_title(),
+			'description' => get_the_archive_description(),
+		)
+	);
+	?>
 
-	<?php if ( have_posts() ) : ?>
-		<?php while ( have_posts() ) : ?>
-			<?php the_post(); ?>
-			<?php get_template_part( 'template-parts/content/content' ); ?>
-		<?php endwhile; ?>
-
-		<?php the_posts_navigation(); ?>
-	<?php else : ?>
-		<?php get_template_part( 'template-parts/content/content', 'none' ); ?>
-	<?php endif; ?>
+	<div class="blog__main">
+		<?php get_template_part( 'template-parts/blog/loop' ); ?>
+	</div>
 </div>
 
 <?php

@@ -79,108 +79,259 @@
   }
 
   if (planes.length) {
-    var frame = root.querySelector('.hero-scene__frame') || root;
-    var isDesktop = window.matchMedia('(min-width: 48rem)').matches;
-    var travelX = Math.max(frame.offsetWidth * 1.2, isDesktop ? 360 : 280);
+    var bounds = root.querySelector('[data-hero-planes]') || root;
+
+    function wrapDegrees(degrees) {
+      return degrees - 360 * Math.floor((degrees + 180) / 360);
+    }
 
     /**
-     * Fly one plane across the banner on its own path.
-     * Progress drives x + y together so cruise and bob never fight.
+     * Nose angle of the artwork after an optional horizontal mirror.
+     * The PNGs point up-right; mirroring turns that into up-left so the
+     * plane can turn around without flying upside down.
+     */
+    function artworkNose(naturalDegrees, facingLeft) {
+      if (!facingLeft) {
+        return naturalDegrees;
+      }
+
+      var radians = (naturalDegrees * Math.PI) / 180;
+      return (Math.atan2(Math.sin(radians), -Math.cos(radians)) * 180) / Math.PI;
+    }
+
+    /**
+     * One point on a closed spiral, in fractions of the banner.
+     * Radius breathes in and out over whole turns so the loop is seamless.
+     */
+    function spiralPoint(progress, config) {
+      var turns = config.turns;
+      var cycle = progress - Math.floor(progress);
+      var scaled = cycle * turns;
+      var lap = Math.floor(scaled);
+      var fraction = scaled - lap;
+
+      var warped = fraction + config.glide * Math.sin(fraction * Math.PI * 2);
+      var along = (lap + warped) / turns;
+      var angle = config.direction * along * turns * Math.PI * 2 + config.phase;
+      var breathe = 0.5 - 0.5 * Math.cos(cycle * Math.PI * 2 * config.breaths);
+      var radius = config.inner + (1 - config.inner) * breathe;
+      var localX = Math.cos(angle) * config.rx * radius;
+      var localY = Math.sin(angle) * config.ry * radius;
+      var tiltCos = Math.cos(config.tilt);
+      var tiltSin = Math.sin(config.tilt);
+      var wander = cycle * Math.PI * 2 * config.wanderTurns;
+
+      return {
+        x:
+          config.cx +
+          (localX * tiltCos - localY * tiltSin) +
+          Math.sin(wander + config.phase * 0.5) * config.wanderX,
+        y:
+          config.cy +
+          (localX * tiltSin + localY * tiltCos) +
+          Math.cos(wander + config.phase) * config.wanderY,
+      };
+    }
+
+    /**
+     * Glide one plane on its own spiral. It first flies in from outside
+     * the banner, then loops the spiral without changing that path.
      */
     function flyPlane(el, config) {
       if (!el) {
         return;
       }
 
-      var duration = config.duration;
-      var fade = Math.min(1.2, duration * 0.08);
-      var proxy = { t: 0 };
+      function render(x, y, deltaX, deltaY, bank) {
+        var width = bounds.offsetWidth;
+        var height = bounds.offsetHeight;
 
-      gsap.set(el, {
-        x: config.startX,
-        y: config.startY,
-        rotation: config.rotation || 0,
-        opacity: 0,
-      });
+        if (!width || !height) {
+          return 0;
+        }
 
-      var flight = gsap.timeline({
-        delay: config.delay,
-        repeat: -1,
-      });
+        var facingLeft = deltaX < 0;
 
-      flight.to(
-        el,
-        {
-          opacity: 1,
-          duration: fade,
-          ease: 'power1.out',
-        },
-        0
-      );
+        if (Math.abs(deltaX) < width * 0.004) {
+          facingLeft = el.dataset.heroFacing === 'left';
+        }
 
-      flight.to(
-        proxy,
-        {
+        el.dataset.heroFacing = facingLeft ? 'left' : 'right';
+
+        var heading = wrapDegrees((Math.atan2(deltaY, deltaX) * 180) / Math.PI);
+        var tilt = Math.max(-18, Math.min(18, bank || 0));
+
+        gsap.set(el, {
+          top: 0,
+          left: 0,
+          xPercent: 0,
+          yPercent: 0,
+          x: x * width - el.offsetWidth / 2,
+          y: y * height - el.offsetHeight / 2,
+          rotation: wrapDegrees(heading - artworkNose(config.nose, facingLeft) + tilt),
+          scaleX: facingLeft ? -1 : 1,
+          transformOrigin: '50% 50%',
+        });
+
+        return heading;
+      }
+
+      function place(progress) {
+        var width = bounds.offsetWidth;
+        var height = bounds.offsetHeight;
+        var here = spiralPoint(progress, config);
+        var ahead = spiralPoint(progress + 0.012, config);
+        var further = spiralPoint(progress + 0.024, config);
+        var deltaX = (ahead.x - here.x) * width;
+        var deltaY = (ahead.y - here.y) * height;
+        var nextHeading = wrapDegrees(
+          (Math.atan2((further.y - ahead.y) * height, (further.x - ahead.x) * width) * 180) / Math.PI
+        );
+        var heading = wrapDegrees((Math.atan2(deltaY, deltaX) * 180) / Math.PI);
+        var bank = wrapDegrees(nextHeading - heading) * config.bank;
+
+        return render(here.x, here.y, deltaX, deltaY, bank);
+      }
+
+      function entryPoint(amount, target) {
+        var from = config.from;
+        var dx = target.x - from.x;
+        var dy = target.y - from.y;
+        var length = Math.sqrt(dx * dx + dy * dy) || 1;
+        var bow = Math.sin(amount * Math.PI) * config.enterArc;
+
+        return {
+          x: from.x + dx * amount + (-dy / length) * bow,
+          y: from.y + dy * amount + (dx / length) * bow,
+        };
+      }
+
+      function beginSpiral() {
+        var proxy = { t: 0 };
+
+        place(0);
+
+        gsap.to(proxy, {
           t: 1,
-          duration: duration,
+          duration: config.duration,
           ease: 'none',
+          repeat: -1,
           onUpdate: function () {
-            var t = proxy.t;
-            var x = config.startX + (config.endX - config.startX) * t;
-            var baseY = config.startY + (config.endY - config.startY) * t;
-            var bob = Math.sin(t * Math.PI * config.bobCycles * 2) * config.bob;
-            gsap.set(el, { x: x, y: baseY + bob });
+            place(proxy.t);
           },
-        },
+        });
+      }
+
+      var spiralStart = spiralPoint(0, config);
+      var entryProxy = { amount: 0 };
+
+      render(
+        config.from.x,
+        config.from.y,
+        (spiralStart.x - config.from.x) * bounds.offsetWidth,
+        (spiralStart.y - config.from.y) * bounds.offsetHeight,
         0
       );
 
-      flight.to(
-        el,
-        {
-          opacity: 0,
-          duration: fade,
-          ease: 'power1.in',
+      gsap.to(entryProxy, {
+        amount: 1,
+        duration: config.enter,
+        delay: config.delay,
+        ease: 'power2.out',
+        onUpdate: function () {
+          var amount = entryProxy.amount;
+          var here = entryPoint(Math.min(amount, 1), spiralStart);
+          var probe = amount + 0.04;
+          var ahead = probe <= 1 ? entryPoint(probe, spiralStart) : spiralPoint((probe - 1) * 0.25, config);
+          var width = bounds.offsetWidth;
+          var height = bounds.offsetHeight;
+          var deltaX = (ahead.x - here.x) * width;
+          var deltaY = (ahead.y - here.y) * height;
+
+          if (amount > 0.72) {
+            var mix = (amount - 0.72) / 0.28;
+            var spiralAhead = spiralPoint(0.012, config);
+            deltaX += ((spiralAhead.x - spiralStart.x) * width - deltaX) * mix;
+            deltaY += ((spiralAhead.y - spiralStart.y) * height - deltaY) * mix;
+          }
+
+          render(here.x, here.y, deltaX, deltaY, 0);
         },
-        duration - fade
-      );
+        onComplete: beginSpiral,
+      });
     }
 
-    // Same cross-banner flights on mobile and desktop; lanes/timing scale slightly.
+    // Three different spirals: tall clockwise, tight counter-clockwise, wide low glide.
     flyPlane(planeYellow, {
-      startX: 0,
-      startY: isDesktop ? 0 : 8,
-      endX: travelX,
-      endY: isDesktop ? -18 : -24,
-      duration: isDesktop ? 26 : 18,
-      delay: 0.35,
-      bob: isDesktop ? 14 : 18,
-      bobCycles: 5,
-      rotation: -4,
+      cx: 0.4,
+      cy: 0.46,
+      rx: 0.26,
+      ry: 0.3,
+      inner: 0.36,
+      turns: 2,
+      direction: 1,
+      breaths: 1,
+      phase: 0.4,
+      tilt: -0.35,
+      wanderTurns: 1,
+      wanderX: 0.05,
+      wanderY: 0.035,
+      glide: 0.08,
+      bank: 1.4,
+      nose: -43,
+      duration: 24,
+      delay: 0.15,
+      from: { x: 0.32, y: -0.28 },
+      enter: 2.4,
+      enterArc: 0.08,
     });
 
     flyPlane(planeBlue, {
-      startX: isDesktop ? -40 : -24,
-      startY: isDesktop ? 36 : 48,
-      endX: travelX * 1.05,
-      endY: isDesktop ? -48 : -20,
-      duration: isDesktop ? 32 : 22,
-      delay: isDesktop ? 4.5 : 2.2,
-      bob: isDesktop ? 22 : 26,
-      bobCycles: 4,
-      rotation: 2,
+      cx: 0.66,
+      cy: 0.5,
+      rx: 0.2,
+      ry: 0.26,
+      inner: 0.32,
+      turns: 3,
+      direction: -1,
+      breaths: 2,
+      phase: 2.2,
+      tilt: 0.55,
+      wanderTurns: 2,
+      wanderX: 0.04,
+      wanderY: 0.04,
+      glide: -0.09,
+      bank: 1.5,
+      nose: -38,
+      duration: 18,
+      delay: 0.35,
+      from: { x: -0.28, y: 0.16 },
+      enter: 2.2,
+      enterArc: -0.07,
     });
 
     flyPlane(planePink, {
-      startX: isDesktop ? -80 : -36,
-      startY: isDesktop ? -10 : 20,
-      endX: travelX * 1.1,
-      endY: isDesktop ? 42 : 56,
-      duration: isDesktop ? 20 : 14,
-      delay: isDesktop ? 8 : 4.5,
-      bob: isDesktop ? 18 : 22,
-      bobCycles: 6,
-      rotation: -8,
+      cx: 0.5,
+      cy: 0.62,
+      rx: 0.3,
+      ry: 0.2,
+      inner: 0.5,
+      turns: 2,
+      direction: 1,
+      breaths: 1,
+      phase: 1.1,
+      tilt: 0.2,
+      wanderTurns: 1,
+      wanderX: 0.03,
+      wanderY: 0.06,
+      glide: 0.06,
+      bank: 1.1,
+      nose: -38,
+      duration: 28,
+      delay: 0.55,
+      from: { x: 1.28, y: 0.68 },
+      enter: 2.6,
+      enterArc: 0.06,
     });
   }
 

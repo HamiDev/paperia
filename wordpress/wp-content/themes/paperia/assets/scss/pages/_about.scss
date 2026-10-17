@@ -1,0 +1,337 @@
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.about-page {
+  padding-block-end: $space-8;
+}
+
+.about-kicker {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin: 0 0 $space-4;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 650;
+
+  &::after {
+    content: '';
+    flex: 1;
+    border-top: 2px dashed var(--color-accent);
+    opacity: 0.45;
+  }
+}
+
+.about-intro {
+  padding-block: $space-7 $space-6;
+  background: linear-gradient(180deg, var(--color-hero-bg) 0%, var(--color-bg) 82%);
+}
+
+.about-intro__inner,
+.about-story__inner,
+.about-stats__inner,
+.about-process__inner {
+  width: min(100% - 2rem, $content-width);
+  margin-inline: auto;
+}
+
+.about-intro__title {
+  max-width: 16em;
+  margin: 0;
+  color: var(--color-heading);
+  font-size: clamp(1.85rem, 4vw, 2.85rem);
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.about-intro__media {
+  position: relative;
+  margin: $space-6 0 0;
+}
+
+.about-intro__image {
+  display: block;
+  width: 100%;
+  height: clamp(16rem, 46vw, 30rem);
+  object-fit: cover;
+  object-position: center 40%;
+  border-radius: $radius-lg;
+}
+
+.about-intro__caption {
+  position: absolute;
+  inset-block-start: $space-4;
+  inset-inline-start: $space-4;
+  margin: 0;
+  padding: 0.35rem 0.85rem;
+  border-radius: $radius-pill;
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.about-intro__cards {
+  display: grid;
+  gap: $space-4;
+  margin-block-start: $space-5;
+
+  @include respond-up($bp-md) {
+    position: relative;
+    z-index: 1;
+    grid-template-columns: 1fr 1fr;
+    margin-block-start: calc(#{$space-7} * -1);
+    padding-inline: $space-5;
+  }
+}
+
+.about-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: $space-5;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.about-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-block-end: $space-4;
+  border-radius: $radius-md;
+  background: var(--color-pastel-mint);
+  color: var(--color-accent);
+  font-size: 1.35rem;
+}
+
+.about-card__title {
+  margin: 0 0 $space-2;
+  color: var(--color-heading);
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+.about-card__text {
+  margin: 0 0 $space-4;
+  color: var(--color-muted);
+}
+
+.about-card__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-block-start: auto;
+  font-weight: 650;
+  text-decoration: none;
+  transition: gap 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    gap: 0.65rem;
+  }
+}
+
+.about-story {
+  padding-block: $space-7 $space-8;
+  scroll-margin-top: 5.5rem;
+}
+
+.about-story__inner {
+  display: grid;
+  gap: $space-6;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: start;
+    gap: $space-6;
+  }
+}
+
+.about-story__title,
+.about-stats__title,
+.about-reel__title {
+  margin: 0 0 $space-4;
+  color: var(--color-heading);
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.45;
+}
+
+.about-story__body p,
+.about-reel__copy p {
+  margin: 0 0 $space-4;
+  color: var(--color-text);
+}
+
+.about-story__sign {
+  margin: 0 0 $space-5;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.about-story__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: $radius-lg;
+
+  @include respond-up($bp-lg) {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.about-phases {
+  display: grid;
+  gap: $space-3;
+  margin: $space-4 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-phase {
+  display: grid;
+  gap: 0.2rem;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: var(--color-bg-soft);
+}
+
+.about-phase__step {
+  color: var(--color-accent);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.about-phase__text {
+  margin: 0;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+.about-stats {
+  padding-block: $space-7;
+  background: var(--color-hero-bg);
+}
+
+.about-stats__head {
+  // max-width: 40rem;
+  margin-block-end: $space-6;
+}
+
+.about-stats__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: var(--color-accent);
+  font-weight: 650;
+}
+
+.about-stats__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-4 $space-5;
+  margin: 0;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.about-stat {
+  margin: 0;
+  padding-block-start: $space-4;
+  border-block-start: 2px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+
+.about-stat__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.about-stat__value {
+  margin: $space-2 0 0;
+  color: var(--color-heading);
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.about-process {
+  padding-block: $space-7 $space-6;
+  scroll-margin-top: 5.5rem;
+}
+
+.about-process__inner {
+  display: grid;
+  gap: $space-6;
+}
+
+.about-reel {
+  display: grid;
+  gap: $space-4;
+  align-items: stretch;
+  min-width: 0;
+
+  @include respond-up($bp-md) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: $space-6;
+  }
+}
+
+.about-reel__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.about-reel--flip {
+  @include respond-up($bp-md) {
+    .about-reel__copy {
+      order: 2;
+    }
+  }
+}
+
+.about-reel__frame {
+  position: relative;
+  width: 100%;
+  min-height: 16rem;
+  overflow: hidden;
+  border-radius: $radius-lg;
+  background: color-mix(in srgb, var(--color-text) 88%, black);
+
+  @include respond-up($bp-md) {
+    height: 100%;
+    min-height: 18rem;
+  }
+}
+
+.about-reel__video {
+  display: block;
+  width: 100%;
+  height: 16rem;
+  object-fit: cover;
+  background: color-mix(in srgb, var(--color-text) 88%, black);
+
+  @include respond-up($bp-md) {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+  }
+}

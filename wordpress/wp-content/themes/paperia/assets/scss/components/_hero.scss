@@ -153,45 +153,40 @@
   height: auto;
   max-width: none;
   user-select: none;
+  // Parked outside the banner until each plane flies in.
+  transform-origin: center center;
   will-change: transform, opacity;
   filter: drop-shadow(0 6px 10px rgb(40 80 60 / 18%));
 
-  // Start just off the left edge; GSAP flies each across the banner.
   &--yellow {
-    top: 18%;
-    left: -18%;
+    top: -28%;
+    left: 32%;
     width: clamp(2.75rem, 14vw, 4.25rem);
     opacity: 0.92;
 
     @include respond-up($hero-breakpoint) {
-      top: 7%;
-      left: -8%;
       width: 6.5%;
     }
   }
 
   &--blue {
-    top: 36%;
-    left: -22%;
+    top: 16%;
+    left: -28%;
     width: clamp(2.5rem, 12vw, 3.75rem);
     opacity: 0.9;
 
     @include respond-up($hero-breakpoint) {
-      top: 20%;
-      left: -10%;
       width: 5.5%;
     }
   }
 
   &--pink {
-    top: 28%;
-    left: -20%;
+    top: 68%;
+    left: 118%;
     width: clamp(2.25rem, 11vw, 3.5rem);
     opacity: 0.88;
 
     @include respond-up($hero-breakpoint) {
-      top: 12%;
-      left: -12%;
       width: 5%;
     }
   }
@@ -225,17 +220,20 @@
   margin-block-end: $space-1;
 }
 
-.hero-scene__brand-image {
+.hero-scene__brand-player {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 7rem;
-  max-height: 7rem;
-  object-fit: contain;
+  width: 7rem;
+  height: 7rem;
 
   @include respond-up($hero-breakpoint) {
-    max-width: 10rem;
-    max-height: 10rem;
+    width: 9rem;
+    height: 9rem;
+  }
+
+  svg {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
   }
 }
 
@@ -279,10 +277,29 @@
   }
 
   .hero-scene.is-reduced-motion .hero-scene__layer,
-  .hero-scene.is-reduced-motion .hero-scene__plane,
   .hero-scene.is-reduced-motion .hero-scene__content,
   .hero-scene.is-reduced-motion .hero-scene__bg-image {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane--yellow {
+    top: 18%;
+    left: 12%;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane--blue {
+    top: 28%;
+    left: 72%;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane--pink {
+    top: 62%;
+    left: 22%;
   }
 }

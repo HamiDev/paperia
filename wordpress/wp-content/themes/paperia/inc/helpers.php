@@ -96,14 +96,25 @@ function paperia_get_account_url() {
 }
 
 /**
- * Brand mark HTML for the homepage hero (above the title).
+ * Root-relative URL for the shared brand Lottie file.
+ *
+ * @return string
+ */
+function paperia_get_lottie_mark_url() {
+	return wp_make_link_relative( PAPERIA_URI . '/assets/lottie/header-logo.json' );
+}
+
+/**
+ * Namdar logo image HTML.
  *
  * Prefers the Customizer logo when set; otherwise the theme brand PNG.
  *
+ * @param string $class CSS class for the image.
  * @return string Escaped HTML.
  */
-function paperia_get_hero_brand_html() {
+function paperia_get_brand_logo_html( $class = 'site-footer__logo' ) {
 	$site_name = get_bloginfo( 'name' );
+	$class     = sanitize_html_class( $class );
 
 	if ( has_custom_logo() ) {
 		$logo_id = (int) get_theme_mod( 'custom_logo' );
@@ -113,7 +124,7 @@ function paperia_get_hero_brand_html() {
 				'medium',
 				false,
 				array(
-					'class'    => 'hero-scene__brand-image',
+					'class'    => $class,
 					'alt'      => $site_name,
 					'decoding' => 'async',
 				)
@@ -125,9 +136,10 @@ function paperia_get_hero_brand_html() {
 	}
 
 	return sprintf(
-		'<img src="%1$s" alt="%2$s" class="hero-scene__brand-image" width="120" height="120" decoding="async">',
+		'<img src="%1$s" alt="%2$s" class="%3$s" width="120" height="120" decoding="async">',
 		esc_url( PAPERIA_URI . '/assets/images/hero/brand.png' ),
-		esc_attr( $site_name )
+		esc_attr( $site_name ),
+		esc_attr( $class )
 	);
 }
 

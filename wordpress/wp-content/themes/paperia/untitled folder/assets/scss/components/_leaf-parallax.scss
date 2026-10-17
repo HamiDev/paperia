@@ -1,0 +1,191 @@
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/mixins' as *;
+
+// Fixed leaf field behind page content. Travel distance is the parallax
+// speed: a larger --leaf-y-to moves that leaf farther over the same scroll.
+
+@keyframes leaf-parallax-drift {
+  from {
+    transform: translate3d(var(--leaf-x-from, 0), var(--leaf-y-from, 0), 0)
+      rotate(var(--leaf-rotate, 0deg));
+  }
+
+  to {
+    transform: translate3d(var(--leaf-x-to, 0), var(--leaf-y-to, -12vh), 0)
+      rotate(var(--leaf-rotate, 0deg));
+  }
+}
+
+.leaf-parallax {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+}
+
+.leaf-parallax__item {
+  position: absolute;
+  width: var(--leaf-size, 8rem);
+  max-width: none;
+  height: auto;
+  opacity: var(--leaf-opacity, 0.18);
+  transform: rotate(var(--leaf-rotate, 0deg));
+  transform-origin: center;
+}
+
+.leaf-parallax__item--sprig {
+  inset-block-start: 14vh;
+  inset-inline-start: -1.75rem;
+  --leaf-size: 7.5rem;
+  --leaf-rotate: -22deg;
+  --leaf-opacity: 0.2;
+  --leaf-y-from: 1.5rem;
+  --leaf-y-to: -10vh;
+  --leaf-x-to: 0.75rem;
+}
+
+.leaf-parallax__item--branch {
+  inset-block-start: 8vh;
+  inset-inline-end: -2.5rem;
+  --leaf-size: 9rem;
+  --leaf-rotate: 18deg;
+  --leaf-opacity: 0.16;
+  --leaf-y-from: 0.5rem;
+  --leaf-y-to: -22vh;
+  --leaf-x-to: -1rem;
+}
+
+.leaf-parallax__item--fern {
+  inset-block-start: 46vh;
+  inset-inline-start: -3rem;
+  --leaf-size: 10rem;
+  --leaf-rotate: 28deg;
+  --leaf-opacity: 0.15;
+  --leaf-y-from: 2rem;
+  --leaf-y-to: -32vh;
+  --leaf-x-from: -0.5rem;
+  --leaf-x-to: 1.25rem;
+}
+
+.leaf-parallax__item--cluster {
+  inset-block-end: 6vh;
+  inset-inline-end: -4rem;
+  --leaf-size: 12rem;
+  --leaf-rotate: -14deg;
+  --leaf-opacity: 0.13;
+  --leaf-y-from: 3rem;
+  --leaf-y-to: -18vh;
+}
+
+.leaf-parallax__item--sprig-alt,
+.leaf-parallax__item--branch-alt,
+.leaf-parallax__item--cluster-alt {
+  display: none;
+}
+
+.leaf-parallax__item--sprig-alt {
+  inset-block-end: 16vh;
+  inset-inline-start: 4%;
+  --leaf-size: 6.5rem;
+  --leaf-rotate: 46deg;
+  --leaf-opacity: 0.12;
+  --leaf-y-from: 1rem;
+  --leaf-y-to: -14vh;
+  --leaf-x-to: 1.5rem;
+}
+
+.leaf-parallax__item--branch-alt {
+  inset-block-start: 62vh;
+  inset-inline-end: -1rem;
+  --leaf-size: 8rem;
+  --leaf-rotate: -32deg;
+  --leaf-opacity: 0.14;
+  --leaf-y-from: 2.5rem;
+  --leaf-y-to: -38vh;
+  --leaf-x-to: -1.25rem;
+}
+
+.leaf-parallax__item--fern-alt {
+  inset-block-start: 28vh;
+  inset-inline-end: -2.25rem;
+  --leaf-size: 7rem;
+  --leaf-rotate: -36deg;
+  --leaf-opacity: 0.12;
+  --leaf-y-to: -26vh;
+  --leaf-x-from: 0.5rem;
+  --leaf-x-to: -0.75rem;
+
+  @media (max-width: #{$bp-sm - 0.02rem}) {
+    display: none;
+  }
+}
+
+.leaf-parallax__item--cluster-alt {
+  inset-block-start: 78vh;
+  inset-inline-start: -3.5rem;
+  --leaf-size: 11rem;
+  --leaf-rotate: 12deg;
+  --leaf-opacity: 0.11;
+  --leaf-y-from: 4rem;
+  --leaf-y-to: -20vh;
+}
+
+@include respond-up($bp-md) {
+  .leaf-parallax__item--sprig {
+    --leaf-size: 9rem;
+    inset-inline-start: -1rem;
+  }
+
+  .leaf-parallax__item--branch {
+    --leaf-size: 11rem;
+  }
+
+  .leaf-parallax__item--fern {
+    --leaf-size: 12.5rem;
+    inset-inline-start: -2rem;
+  }
+
+  .leaf-parallax__item--cluster {
+    --leaf-size: 15rem;
+  }
+
+  .leaf-parallax__item--sprig-alt,
+  .leaf-parallax__item--branch-alt,
+  .leaf-parallax__item--cluster-alt {
+    display: block;
+  }
+
+  .leaf-parallax__item--fern-alt {
+    --leaf-size: 9rem;
+    inset-inline-end: 2%;
+  }
+}
+
+// Dark surfaces swallow pale greens, so lift the wash slightly.
+[data-theme='dark'] .leaf-parallax__item {
+  opacity: calc(var(--leaf-opacity, 0.18) + 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme='system'] .leaf-parallax__item {
+    opacity: calc(var(--leaf-opacity, 0.18) + 0.08);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .leaf-parallax__item {
+      animation: leaf-parallax-drift linear both;
+      animation-duration: auto;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+@media print {
+  .leaf-parallax {
+    display: none;
+  }
+}

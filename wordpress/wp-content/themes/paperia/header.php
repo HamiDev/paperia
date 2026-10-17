@@ -26,6 +26,8 @@ $paperia_scheme = paperia_get_color_scheme();
 
 <a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'paperia' ); ?></a>
 
+<?php get_template_part( 'template-parts/components/leaf', 'parallax' ); ?>
+
 <?php get_template_part( 'template-parts/header/site', 'header' ); ?>
 
 <main id="main" class="site-main">

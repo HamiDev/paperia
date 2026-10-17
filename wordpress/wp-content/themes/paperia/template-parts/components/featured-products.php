@@ -27,7 +27,7 @@ if ( function_exists( 'wc_get_products' ) ) {
 <section class="home-featured" aria-labelledby="home-featured-title">
 	<header class="home-featured__header">
 		<h2 id="home-featured-title" class="home-featured__title">
-			<?php esc_html_e( 'محصولات برگزیده نامدار', 'paperia' ); ?>
+			<?php esc_html_e( 'محصولات نامدار پیپر', 'paperia' ); ?>
 		</h2>
 		<span class="home-featured__rule" aria-hidden="true"></span>
 	</header>

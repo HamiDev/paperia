@@ -7,7 +7,7 @@
 
 .site-header {
   --header-pad-block: #{$space-3};
-  --header-logo-height: 3rem;
+  --header-logo-size: 4.5rem;
 
   position: sticky;
   inset-block-start: 0;
@@ -21,7 +21,7 @@
 
   &.is-scrolled {
     --header-pad-block: #{$space-2};
-    --header-logo-height: 2.25rem;
+    --header-logo-size: 3.25rem;
     border-block-end-color: var(--color-border);
     box-shadow: 0 1px 0 color-mix(in srgb, var(--color-border) 80%, transparent);
   }
@@ -51,35 +51,36 @@
   flex-shrink: 0;
 }
 
-.site-title {
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
   text-decoration: none;
 }
 
-.site-title__mark {
+.site-logo__player {
+  display: block;
+  width: var(--header-logo-size);
+  height: var(--header-logo-size);
+  transition:
+    width 0.25s ease,
+    height 0.25s ease;
+
+  svg {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.site-logo__name {
   color: var(--color-heading);
   font-family: var(--font-ui);
   font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   font-weight: 800;
   letter-spacing: 0.04em;
-  transition: font-size 0.25s ease;
-}
-
-.site-header.is-scrolled .site-title__mark {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-}
-
-.custom-logo-link {
-  display: inline-flex;
-  align-items: center;
-  max-width: 10rem;
-  line-height: 0;
-}
-
-.custom-logo {
-  width: auto;
-  height: auto;
-  max-height: var(--header-logo-height);
-  transition: max-height 0.25s ease;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .site-header__actions {

@@ -1,0 +1,279 @@
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+$contact-split: 56rem;
+
+.paperia-contact-page {
+  background:
+    radial-gradient(ellipse 70% 42% at 100% 0%, var(--color-pastel-mint) 0%, transparent 58%),
+    radial-gradient(ellipse 48% 36% at 0% 12%, var(--color-hero-bg) 0%, transparent 52%),
+    var(--color-bg-soft);
+}
+
+.contact-page .container {
+  padding-block: $space-6 $space-8;
+}
+
+.contact-page__intro {
+  max-width: 40rem;
+  margin-bottom: $space-6;
+}
+
+.contact-page__eyebrow {
+  margin: 0 0 $space-3;
+  color: var(--color-accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.contact-page__title {
+  margin: 0 0 $space-3;
+  color: var(--color-heading);
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.contact-page__lead {
+  margin: 0;
+  max-width: 36rem;
+  color: var(--color-muted);
+  font-size: 1.05rem;
+}
+
+.contact-page__layout {
+  display: grid;
+  gap: $space-5;
+  align-items: start;
+
+  @include respond-up($contact-split) {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+    gap: $space-6;
+  }
+}
+
+.contact-faq__heading {
+  margin-bottom: $space-4;
+}
+
+.contact-faq__title,
+.contact-panel__title {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.contact-faq__list {
+  display: grid;
+  gap: $space-3;
+}
+
+.contact-faq__item {
+  // Lets block-size animate between 0 and auto.
+  interpolate-size: allow-keywords;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 10px 28px rgb(40 150 108 / 5%);
+  overflow: hidden;
+
+  &::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 0.35s ease,
+      opacity 0.3s ease,
+      content-visibility 0.35s ease allow-discrete;
+  }
+
+  &[open] {
+    border-color: color-mix(in srgb, var(--color-accent) 32%, var(--color-border));
+
+    &::details-content {
+      block-size: auto;
+      opacity: 1;
+    }
+  }
+}
+
+.contact-faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+  padding: $space-4 $space-5;
+  color: var(--color-text);
+  font-weight: 700;
+  line-height: 1.55;
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+}
+
+.contact-faq__question-text {
+  min-width: 0;
+}
+
+.contact-faq__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: $radius-pill;
+  background: var(--color-pastel-mint);
+  color: var(--color-accent);
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease,
+    color 0.35s ease;
+
+  &::before {
+    content: '';
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-top: -0.15rem;
+    // Physical edges so the chevron points down in both LTR and RTL.
+    border-bottom: 2px solid currentcolor;
+    border-right: 2px solid currentcolor;
+    transform: rotate(45deg);
+  }
+}
+
+.contact-faq__item[open] .contact-faq__icon {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  transform: rotate(180deg);
+}
+
+.contact-faq__answer {
+  padding: 0 $space-5 $space-5;
+  color: var(--color-muted);
+  font-size: 0.98rem;
+  line-height: 1.85;
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    font-weight: 700;
+  }
+
+  cite {
+    color: var(--color-text);
+    font-style: normal;
+    font-weight: 700;
+  }
+}
+
+.contact-panel {
+  order: -1;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 16px 40px rgb(40 150 108 / 8%);
+
+  @include respond-up($contact-split) {
+    position: sticky;
+    top: 6.5rem;
+    order: 0;
+  }
+}
+
+.contact-panel__media {
+  margin: 0;
+  background: var(--color-hero-bg);
+}
+
+.contact-panel__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 331 / 152;
+  object-fit: cover;
+}
+
+.contact-panel__body {
+  display: grid;
+  gap: $space-4;
+  padding: $space-5;
+}
+
+.contact-channels {
+  display: grid;
+  gap: $space-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-channels__link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: $space-3;
+  row-gap: 0.15rem;
+  align-items: center;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: var(--color-bg-soft);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--color-pastel-mint);
+    color: var(--color-text);
+    transform: translateY(-1px);
+  }
+}
+
+.contact-channels__icon {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: $radius-pill;
+  background: var(--color-surface);
+  color: var(--color-accent);
+  font-size: 1.15rem;
+}
+
+.contact-channels__label {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.contact-channels__value {
+  color: var(--color-text);
+  font-weight: 700;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-faq__item::details-content,
+  .contact-faq__icon,
+  .contact-channels__link {
+    transition: none;
+  }
+}

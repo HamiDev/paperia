@@ -2,7 +2,8 @@
 /**
  * Site footer chrome — four columns matching the landing mockup.
  *
- * Contact / social values prefer ACF Options when available.
+ * Phone and email come from the Customizer. Address and social links still
+ * read ACF options when that plugin can provide them.
  *
  * @package Paperia
  */
@@ -11,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$paperia_phone   = '';
-$paperia_email   = '';
+$paperia_phone   = paperia_get_contact_phone();
+$paperia_email   = paperia_get_contact_email();
 $paperia_address = '';
 $paperia_social  = array(
 	'instagram' => '',
@@ -22,20 +23,12 @@ $paperia_social  = array(
 );
 
 if ( function_exists( 'get_field' ) ) {
-	$option_phone   = get_field( 'phone', 'option' );
-	$option_email   = get_field( 'email', 'option' );
 	$option_address = get_field( 'address', 'option' );
 	$option_ig      = get_field( 'social_instagram', 'option' );
 	$option_tg      = get_field( 'social_telegram', 'option' );
 	$option_li      = get_field( 'social_linkedin', 'option' );
 	$option_wa      = get_field( 'social_whatsapp', 'option' );
 
-	if ( is_string( $option_phone ) ) {
-		$paperia_phone = $option_phone;
-	}
-	if ( is_string( $option_email ) ) {
-		$paperia_email = $option_email;
-	}
 	if ( is_string( $option_address ) ) {
 		$paperia_address = $option_address;
 	}
@@ -57,7 +50,7 @@ $paperia_has_social = (bool) array_filter( $paperia_social );
 ?>
 <footer class="site-footer" role="contentinfo">
 	<div class="site-footer__inner">
-		<div class="site-footer__grid">
+		<!-- <div class="site-footer__grid">
 			<section class="site-footer__col site-footer__col--social">
 				<h2 class="site-footer__heading"><?php esc_html_e( 'ما را دنبال کنید', 'paperia' ); ?></h2>
 				<?php if ( $paperia_has_social ) : ?>
@@ -147,7 +140,7 @@ $paperia_has_social = (bool) array_filter( $paperia_social );
 					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'ملزومات چاپ', 'paperia' ); ?></a></li>
 				</ul>
 			</section>
-		</div>
+		</div> -->
 
 		<div class="site-footer__bottom">
 			<p class="site-footer__copy">
@@ -155,7 +148,9 @@ $paperia_has_social = (bool) array_filter( $paperia_social );
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>
 				— <?php esc_html_e( 'تمامی حقوق محفوظ است.', 'paperia' ); ?>
 			</p>
-			<span class="site-footer__logo-mark" aria-hidden="true">NAMDAR</span>
+			<a class="site-footer__logo-link" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+				<?php echo paperia_get_brand_logo_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper. ?>
+			</a>
 		</div>
 	</div>
 </footer>

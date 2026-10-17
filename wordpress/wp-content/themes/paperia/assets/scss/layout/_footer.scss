@@ -118,9 +118,14 @@
   font-weight: 700;
 }
 
-.site-footer__logo-mark {
-  color: var(--color-heading);
-  font-family: var(--font-ui);
-  font-weight: 800;
-  letter-spacing: 0.05em;
+.site-footer__logo-link {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.site-footer__logo {
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: 2.75rem;
 }

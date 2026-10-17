@@ -20,13 +20,15 @@ $paperia_account_label = is_user_logged_in()
 <header class="site-header" role="banner" data-site-header>
 	<div class="site-header__inner">
 		<div class="site-header__brand">
-			<?php if ( has_custom_logo() ) : ?>
-				<?php the_custom_logo(); ?>
-			<?php else : ?>
-				<a class="site-title" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<span class="site-title__mark"><?php bloginfo( 'name' ); ?></span>
-				</a>
-			<?php endif; ?>
+			<a class="site-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+				<span
+					class="site-logo__player"
+					data-lottie
+					data-src="<?php echo esc_url( paperia_get_lottie_mark_url() ); ?>"
+					aria-hidden="true"
+				></span>
+				<span class="site-logo__name"><?php bloginfo( 'name' ); ?></span>
+			</a>
 		</div>
 
 		<nav

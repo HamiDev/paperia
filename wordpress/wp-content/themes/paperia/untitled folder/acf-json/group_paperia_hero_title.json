@@ -1,0 +1,45 @@
+{
+  "key": "group_paperia_hero_title",
+  "title": "Homepage Hero",
+  "fields": [
+    {
+      "key": "field_paperia_hero_title",
+      "label": "Hero Title",
+      "name": "hero_title",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "Homepage hero headline. Leave empty to use the theme default.",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "placeholder": "کاغذ نامدار، با افتخار برای ایران",
+      "prepend": "",
+      "append": ""
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "page_type",
+        "operator": "==",
+        "value": "front_page"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "acf_after_title",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": "Editable headline for the animated homepage hero scene.",
+  "show_in_rest": 0,
+  "modified": 1727760000
+}

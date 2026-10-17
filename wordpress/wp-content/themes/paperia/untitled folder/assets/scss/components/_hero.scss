@@ -1,0 +1,305 @@
+@use "../abstracts/breakpoints" as *;
+@use "../abstracts/mixins" as *;
+@use "../abstracts/variables" as *;
+
+// Softened layered homepage hero.
+// Mobile: stacked copy + products. Desktop: absolute scene matching the banner art.
+
+.hero-scene {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-hero-bg);
+}
+
+.hero-scene__frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  min-height: 30rem;
+  padding-block: $space-7 $space-6;
+
+  @include respond-up($hero-breakpoint) {
+    display: block;
+    // Keep the full composition in the first viewport (sticky header ~4.5rem).
+    height: min(#{calc(100vw * 682 / 1024)}, calc(100vh - 4.5rem), 40rem);
+    min-height: 22rem;
+    padding: 0;
+  }
+}
+
+.hero-scene__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-scene__bg-image {
+  display: block;
+  width: 100%;
+  height: 115%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center top;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.hero-scene__stage {
+  position: relative;
+  z-index: 1;
+  order: 2;
+  display: grid;
+  // Keep product art LTR so notebooks stay visually left on mobile + desktop.
+  // (Page is RTL; without this, grid places the first column on the right.)
+  direction: ltr;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: $space-3;
+  padding-inline: $space-4;
+  margin-block-start: $space-4;
+  pointer-events: none;
+  top: 4rem;
+
+  @include respond-up($hero-breakpoint) {
+    position: absolute;
+    inset: 0;
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.hero-scene__layer {
+  display: block;
+  max-width: none;
+  height: auto;
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+.hero-scene__layer--leaves-left,
+.hero-scene__layer--leaves-right {
+  display: none;
+
+  @include respond-up($hero-breakpoint) {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    width: 10%;
+    filter: blur(0.35px);
+    opacity: 0.88;
+  }
+}
+
+.hero-scene__layer--leaves-left {
+  @include respond-up($hero-breakpoint) {
+    left: -1%;
+    bottom: -2%;
+    width: 10%;
+  }
+}
+
+.hero-scene__layer--leaves-right {
+  @include respond-up($hero-breakpoint) {
+    right: -1%;
+    bottom: -2%;
+    width: 11%;
+  }
+}
+
+.hero-scene__layer--notebooks {
+  width: 100%;
+  justify-self: start;
+  filter: drop-shadow(0 8px 18px rgb(40 150 108 / 12%));
+
+  @include respond-up($hero-breakpoint) {
+    position: absolute;
+    z-index: 3;
+    left: 3%;
+    bottom: 3%;
+    width: 23%;
+  }
+}
+
+.hero-scene__layer--products {
+  width: 100%;
+  justify-self: end;
+  filter: drop-shadow(0 8px 18px rgb(40 150 108 / 12%));
+
+  @include respond-up($hero-breakpoint) {
+    position: absolute;
+    z-index: 3;
+    right: 2%;
+    bottom: 12%;
+    width: 38%;
+  }
+}
+
+.hero-scene__planes {
+  // Full hero frame (not the product strip) so flights cross the whole banner.
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-scene__plane {
+  position: absolute;
+  display: block;
+  height: auto;
+  max-width: none;
+  user-select: none;
+  // Parked outside the banner until each plane flies in.
+  transform-origin: center center;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 6px 10px rgb(40 80 60 / 18%));
+
+  &--yellow {
+    top: -28%;
+    left: 32%;
+    width: clamp(2.75rem, 14vw, 4.25rem);
+    opacity: 0.92;
+
+    @include respond-up($hero-breakpoint) {
+      width: 6.5%;
+    }
+  }
+
+  &--blue {
+    top: 16%;
+    left: -28%;
+    width: clamp(2.5rem, 12vw, 3.75rem);
+    opacity: 0.9;
+
+    @include respond-up($hero-breakpoint) {
+      width: 5.5%;
+    }
+  }
+
+  &--pink {
+    top: 68%;
+    left: 118%;
+    width: clamp(2.25rem, 11vw, 3.5rem);
+    opacity: 0.88;
+
+    @include respond-up($hero-breakpoint) {
+      width: 5%;
+    }
+  }
+}
+
+.hero-scene__content {
+  position: relative;
+  z-index: 5;
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  padding-inline: $space-5;
+  text-align: center;
+
+  @include respond-up($hero-breakpoint) {
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    padding-inline: clamp(1.5rem, 10vw, 8rem);
+    padding-block: $space-5;
+    // Keep copy in the open center — products hug the sides.
+    padding-block-end: 12%;
+  }
+}
+
+.hero-scene__brand {
+  display: flex;
+  justify-content: center;
+  margin-block-end: $space-1;
+}
+
+.hero-scene__brand-player {
+  display: block;
+  width: 7rem;
+  height: 7rem;
+
+  @include respond-up($hero-breakpoint) {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  svg {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.hero-scene__title {
+  margin: 0;
+  max-width: 18ch;
+  color: var(--color-heading);
+  font-family: var(--font-ui);
+  font-size: clamp(1.5rem, 3.6vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 55%);
+}
+
+.hero-scene__subtitle {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--color-heading);
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  font-weight: 500;
+  line-height: 1.6;
+  opacity: 0.88;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 45%);
+}
+
+.hero-scene__cta {
+  margin-block-start: $space-2;
+  padding-inline: 1.75rem;
+  padding-block: 0.8rem;
+  border-radius: $radius-pill;
+  box-shadow: 0 10px 24px rgb(40 150 108 / 22%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene__bg-image,
+  .hero-scene__layer,
+  .hero-scene__plane {
+    will-change: auto;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__layer,
+  .hero-scene.is-reduced-motion .hero-scene__content,
+  .hero-scene.is-reduced-motion .hero-scene__bg-image {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane--yellow {
+    top: 18%;
+    left: 12%;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane--blue {
+    top: 28%;
+    left: 72%;
+  }
+
+  .hero-scene.is-reduced-motion .hero-scene__plane--pink {
+    top: 62%;
+    left: 22%;
+  }
+}

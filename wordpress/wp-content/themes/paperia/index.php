@@ -11,17 +11,10 @@
 get_header();
 ?>
 
-<div class="container">
-	<?php if ( have_posts() ) : ?>
-		<?php while ( have_posts() ) : ?>
-			<?php the_post(); ?>
-			<?php get_template_part( 'template-parts/content/content', get_post_type() ); ?>
-		<?php endwhile; ?>
-
-		<?php the_posts_navigation(); ?>
-	<?php else : ?>
-		<?php get_template_part( 'template-parts/content/content', 'none' ); ?>
-	<?php endif; ?>
+<div class="blog">
+	<div class="blog__main">
+		<?php get_template_part( 'template-parts/blog/loop' ); ?>
+	</div>
 </div>
 
 <?php
