@@ -215,3 +215,33 @@ function paperia_account_body_class( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'paperia_account_body_class' );
+
+/**
+ * Rename the orders table actions column.
+ *
+ * @param array $columns Column slug => label.
+ * @return array
+ */
+function paperia_account_orders_columns( $columns ) {
+	if ( isset( $columns['order-actions'] ) ) {
+		$columns['order-actions'] = __( 'عملیات', 'paperia' );
+	}
+
+	return $columns;
+}
+add_filter( 'woocommerce_account_orders_columns', 'paperia_account_orders_columns' );
+
+/**
+ * Hide Downloads from the My Account navigation.
+ *
+ * @param array $items Endpoint slug => label.
+ * @return array
+ */
+function paperia_remove_account_downloads_menu_item( $items ) {
+	if ( isset( $items['downloads'] ) ) {
+		unset( $items['downloads'] );
+	}
+
+	return $items;
+}
+add_filter( 'woocommerce_account_menu_items', 'paperia_remove_account_downloads_menu_item' );

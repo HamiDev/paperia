@@ -18,11 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Hook: wp_enqueue_scripts — the correct place for theme CSS/JS.
  */
 function paperia_enqueue_assets() {
+	$paperia_styles_path = PAPERIA_DIR . '/assets/css/styles.css';
+	$paperia_styles_ver  = file_exists( $paperia_styles_path ) ? (string) filemtime( $paperia_styles_path ) : PAPERIA_VERSION;
+
 	wp_enqueue_style(
 		'paperia-styles',
 		PAPERIA_URI . '/assets/css/styles.css',
 		array(),
-		PAPERIA_VERSION
+		$paperia_styles_ver
 	);
 
 	wp_enqueue_script(
