@@ -13,6 +13,11 @@ $notes = $order->get_customer_order_notes();
 ?>
 
 <div class="paperia-account-view-order">
+	<a class="paperia-account-back" href="<?php echo esc_url( wc_get_account_endpoint_url( 'orders' ) ); ?>">
+		<span class="paperia-account-back__icon icon-ArrowRight" aria-hidden="true"></span>
+		<?php esc_html_e( 'بازگشت به سفارش‌ها', 'paperia' ); ?>
+	</a>
+
 	<p class="paperia-account-view-order__status">
 		<?php
 		echo wp_kses_post(
